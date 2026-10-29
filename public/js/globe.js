@@ -40,6 +40,7 @@ function drawGlobe(cv,t){
   g.strokeStyle=rim;g.lineWidth=Math.max(1,S*.022);g.beginPath();g.arc(c,c,R,0,7);g.stroke();
   ring(false);
 }
+if(document.querySelector('script[src*="/.netlify/scripts/hud"]'))document.body.classList.add('nf-badge');
 (function globeLoop(){
   const draw=t=>{if(!document.hidden)$$('canvas.globe').forEach(cv=>{if(cv.offsetParent)drawGlobe(cv,t)})};
   if(reduced){draw(2400);addEventListener('resize',()=>draw(2400));return}

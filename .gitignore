@@ -1,0 +1,10 @@
+# secrets — never commit
+.env
+.env.*
+!.env.example
+# dependencies / local tooling
+node_modules/
+.netlify/
+# os
+.DS_Store
+Thumbs.db

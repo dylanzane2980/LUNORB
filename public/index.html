@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lunorb</title>
+<meta name="description" content="Lunorb is an AI workspace: 750 tools, guided everyday playbooks and a workflow builder that syncs across your devices.">
+<meta name="theme-color" content="#030712">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/features.css">
+<link rel="stylesheet" href="css/life.css">
+<link rel="stylesheet" href="css/bento.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="scene" id="scene"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo" data-go="home" role="link" tabindex="0">LUN<span class="o"></span>RB</div>
+    <div class="links" id="links">
+      <a href="#home" data-go="home">Home</a>
+      <a href="#discover" data-go="discover">Discover</a>
+      <a href="#life" data-go="life">Everyday</a>
+      <a href="#builder" data-go="builder">Workflows</a>
+      <a href="#projects" data-go="projects">Projects</a>
+      <a href="#community" data-go="community">Community</a>
+      <a href="#learn" data-go="learn">Learn</a>
+    </div>
+    <div class="nav-r">
+      <button id="navSearch" aria-label="Search" title="Search (Ctrl+K)" data-ic="search"></button>
+      <div class="pop-wrap">
+        <button id="bell" aria-label="Notifications"><span data-ic="bell"></span><span class="dot" hidden></span></button>
+        <div class="menu glass pop" id="bellMenu"></div>
+      </div>
+      <div class="pop-wrap">
+        <button class="avatar" id="avatarBtn" aria-label="Account"></button>
+        <div class="menu glass pop" id="avatarMenu">
+          <div class="res-h" id="acctName">Local mode · saved in this browser</div>
+          <div class="res" data-go="workspace"><span data-ic="folder" data-s="16"></span>My Workspace</div>
+          <div class="res" data-go="workspace" data-tab="saved"><span data-ic="heart" data-s="16"></span>Saved tools<small id="savedCount">0</small></div>
+          <div class="res" data-go="insights"><span data-ic="chart" data-s="16"></span>Insights</div>
+          <div class="res" data-go="learn"><span data-ic="cap" data-s="16"></span>Learning path</div>
+          <div id="acctRows"></div>
+        </div>
+      </div>
+      <button class="burger" id="burger" aria-label="Menu" data-ic="menu"></button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+<div class="boot-loader" aria-live="polite"><canvas class="globe" aria-hidden="true"></canvas><span>Loading your workspace…</span></div>
+
+<!-- ================= AUTH ================= -->
+<section class="page" id="p-auth">
+  <div class="auth">
+    <div class="auth-copy">
+      <div class="eyebrow" data-a>Welcome to Lunorb</div>
+      <h1 data-a style="--d:1">Your AI workspace<br>for bigger <span class="grad">possibilities.</span></h1>
+      <p class="lede" data-a style="--d:2">Find the right tools, follow guided playbooks, and build workflows that get real things done.</p>
+      <ul class="auth-points" data-a style="--d:3">
+        <li><span data-ic="search" data-s="16"></span>750 AI tools across 30 categories</li>
+        <li><span data-ic="check" data-s="16"></span>20 guided playbooks with ready-made prompts</li>
+        <li><span data-ic="flow" data-s="16"></span>A workflow builder that syncs across your devices</li>
+      </ul>
+    </div>
+    <div class="glass auth-card" id="authCard" data-a style="--d:2"></div>
+  </div>
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Better tools. A brighter tomorrow.</div><div class="pg">Account</div></footer>
+</section>
+
+
+<!-- ================= HOME ================= -->
+<section class="page" id="p-home">
+  <div class="hero">
+    <div>
+      <div class="lede" data-a style="font-size:15px;color:#c3cde9" id="greet">Good evening</div>
+      <h1 data-a style="--d:1">Your AI workspace<br>for bigger <span class="grad">possibilities.</span></h1>
+      <p class="lede" data-a style="--d:2">Discover. Build. Create. Go further with AI.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Ideas<br>Tools<br>People<br>A brighter<br>tomorrow</div>
+  </div>
+
+  <div class="search" data-a style="--d:3">
+    <label>
+      <span data-ic="search" data-s="22" style="color:#aebde3"></span>
+      <input id="q" autocomplete="off" placeholder="What do you want to get done? Try “plan meals for the week”">
+      <span class="kbd">/</span>
+      <button class="go" id="qGo" aria-label="Go" data-ic="arrow"></button>
+    </label>
+    <div class="results glass" id="results"></div>
+  </div>
+  <div class="chips cat-chips" id="homeChips" data-a style="--d:4"></div>
+
+  <div class="grid4" style="margin-top:30px">
+    <button class="glass glow qa" data-a style="--d:4" data-go="discover"><div class="badge" style="--c:#4c8dff" data-ic="sparkle"></div><h4>Explore Tools</h4><p>750 tools, 30 categories</p></button>
+    <button class="glass glow qa" data-a style="--d:5" data-go="life"><div class="badge" style="--c:#14b8a6" data-ic="check"></div><h4>Everyday tasks</h4><p>20 guided playbooks</p></button>
+    <button class="glass glow qa" data-a style="--d:6" data-go="builder"><div class="badge" style="--c:#a855f7" data-ic="flow"></div><h4>Build a Workflow</h4><p>Chain tools with AI</p></button>
+    <button class="glass glow qa" data-a style="--d:7" data-act="goal"><div class="badge" style="--c:#eab308" data-ic="target"></div><h4>Tell us your goal</h4><p>Get a curated stack</p></button>
+  </div>
+
+  <section class="bento-sec" aria-labelledby="bentoH" data-a style="--d:8">
+    <div class="bento-head">
+      <p class="bento-eyebrow">Your AI stack</p>
+      <h2 id="bentoH">Built on tools you trust, watched in real time</h2>
+      <p>A live view of AI response times, a guided run in progress, your progress and the stack underneath. <span class="bento-note">Response times and prompt volume are simulated.</span></p>
+    </div>
+    <div class="bento" id="bento"></div>
+  </section>
+
+  <div class="sec-h" data-a style="--d:8"><h3>Get everyday things done</h3><button class="link" data-go="life">All playbooks <span data-ic="arrow" data-s="14"></span></button></div>
+  <div class="pb-grid four" id="homePb"></div>
+
+  <div class="sec-h" data-a style="--d:8"><h3 id="recentH">Recently used</h3><button class="link" data-go="workspace">See all <span data-ic="arrow" data-s="14"></span></button></div>
+  <div class="tools" id="recent"></div>
+
+  <div class="sec-h" data-a style="--d:9"><h3>Browse by category</h3><button class="link" data-go="discover">All 30 categories <span data-ic="arrow" data-s="14"></span></button></div>
+  <div class="cat-grid" id="homeCats"></div>
+
+  <div class="sec-h" data-a style="--d:10"><h3>Top picks for you</h3><span class="muted-sm">Editor’s picks</span></div>
+  <div class="grid3" id="topPicks"></div>
+
+  <div class="sec-h" data-a style="--d:11"><h3>Prompt inspiration</h3><button class="link" data-go="community">More from the community <span data-ic="arrow" data-s="14"></span></button></div>
+  <div class="grid3" id="prompts"></div>
+
+  <div class="glass cta" data-a style="--d:12">
+    <div class="scene fill" id="ctaScene"></div>
+    <div class="cta-row">
+      <div>
+        <div class="eyebrow">Create without limits</div>
+        <h2>From a single idea<br>to <span class="grad">extraordinary results.</span></h2>
+        <p>Combine the best AI tools, streamline your workflow, and turn imagination into impact.</p>
+        <div style="margin-top:26px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-go="builder">Start building <span data-ic="arrow" data-s="16"></span></button><button class="btn ghost" data-go="discover">Explore all tools</button></div>
+      </div>
+      <div class="stats-col">
+        <div><b data-count="750" data-suf="">750</b><span>AI tools</span></div>
+        <div><b data-count="30" data-suf="">30</b><span>Categories</span></div>
+        <div><b data-count="20" data-suf="">20</b><span>Guided playbooks</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Better tools. A brighter tomorrow.</div><div class="pg">01 / 09<br>Workspace</div></footer>
+  <p class="credit">Background mountains adapted from “<a href="https://commons.wikimedia.org/wiki/File:Snow_Dome%2BDome_Glacier.jpg" target="_blank" rel="noopener">Snow Dome + Dome Glacier</a>” by Qyd, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a> (sky removed, night-graded; adaptation shared under the same licence).</p>
+</section>
+
+<!-- ================= DISCOVER ================= -->
+<section class="page" id="p-discover">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Explore · Compare · Create</div>
+      <h1 data-a style="--d:1">Explore AI tools<br>beyond <span class="grad">limits.</span></h1>
+      <p class="lede" data-a style="--d:2">750 hand-curated tools across 30 categories. Find the right one, compare, and add it to your workflow.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Ideas<br>Tools<br>People<br>Progress</div>
+  </div>
+
+  <div class="dir-bar" data-a style="--d:3">
+    <label class="mini-search">
+      <span data-ic="search" data-s="18"></span>
+      <input id="dq" autocomplete="off" placeholder="Search tools, categories, or use cases…">
+      <button id="dqClear" aria-label="Clear" data-ic="x" data-s="14" hidden></button>
+    </label>
+    <div class="seg" id="priceSeg"><button class="on" data-p="all">All</button><button data-p="free">Free / Open</button><button data-p="api">Has API</button><button data-p="saved">Saved</button></div>
+    <div class="sel"><button id="sortBtn"><span id="sortLbl">Featured</span> <span data-ic="down" data-s="14"></span></button>
+      <div class="menu glass" id="sortMenu"><div class="res" data-sort="featured">Featured</div><div class="res" data-sort="az">Name A–Z</div><div class="res" data-sort="za">Name Z–A</div><div class="res" data-sort="cat">Category</div></div>
+    </div>
+  </div>
+  <div class="chips cat-chips scroll" id="dirChips" data-a style="--d:4"></div>
+  <div class="dir-meta" data-a style="--d:4"><span id="dirCount">750 tools</span><span class="muted-sm" id="dirHint"></span></div>
+  <div class="dir-grid" id="dirGrid"></div>
+  <div style="text-align:center;margin-top:26px"><button class="btn" id="loadMore">Load more <span data-ic="down" data-s="16"></span></button></div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Better tools. A brighter tomorrow.</div><div class="pg">02 / 09<br>Discover</div></footer>
+</section>
+
+<!-- ================= EVERYDAY ================= -->
+<section class="page" id="p-life">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Everyday AI</div>
+      <h1 data-a style="--d:1">Make every day<br>a little <span class="grad">easier.</span></h1>
+      <p class="lede" data-a style="--d:2">Tell us what you need to get done. We’ll pick the right tools, write the prompts, and walk you through it step by step.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Less<br>Busywork<br>More<br>Living</div>
+  </div>
+  <div class="search" id="lifeSearch" data-a style="--d:3">
+    <label>
+      <span data-ic="sparkle" data-s="22" style="color:#aebde3"></span>
+      <input id="lifeQ" autocomplete="off" placeholder="What do you need help with today?">
+      <button class="go" id="lifeGo" aria-label="Get a plan" data-ic="arrow"></button>
+    </label>
+    <div class="results glass" id="lifeResults"></div>
+  </div>
+  <div class="chips cat-chips" id="lifeChips" data-a style="--d:4"></div>
+
+  <div class="how" data-a style="--d:5">
+    <div><b>1</b><span><strong>Pick a task</strong>Choose a playbook or describe yours.</span></div>
+    <div><b>2</b><span><strong>Add your details</strong>Prompts fill themselves in as you type.</span></div>
+    <div><b>3</b><span><strong>Copy, open, done</strong>Each step opens the right tool with the prompt ready.</span></div>
+  </div>
+
+  <div id="pbGoing" hidden>
+    <div class="sec-h"><h3>Continue where you left off</h3></div>
+    <div class="pb-grid" id="pbGoingGrid"></div>
+  </div>
+  <div class="sec-h" data-a style="--d:6"><h3>Guided playbooks</h3><span class="muted-sm">Real prompts · the best tool for each step</span></div>
+  <div class="chips cat-chips scroll" id="lifeAreas"></div>
+  <div class="pb-grid" id="pbGrid"></div>
+
+  <div class="sec-h" data-a style="--d:7"><h3>What people actually use AI for</h3><span class="muted-sm">Why these playbooks exist</span></div>
+  <div class="stat-grid" id="research"></div>
+  <p class="muted-sm tiny" style="margin-top:12px">Playbooks are built around the most common real-world uses — practical guidance, finding information, writing, and organizing life. Time-saved figures are estimates.</p>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Less busywork. More living.</div><div class="pg">03 / 09<br>Everyday</div></footer>
+</section>
+
+<!-- ================= BUILDER ================= -->
+<section class="page" id="p-builder">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Workflow builder</div>
+      <h1 data-a style="--d:1">Turn ideas into <span class="grad">reality</span><br>with AI <span class="grad">workflows.</span></h1>
+      <p class="lede" data-a style="--d:2">Combine tools, automate steps, and create powerful workflows in minutes. No code required.</p>
+      <div class="flow-steps" data-a style="--d:3"><span><i data-ic="target" data-s="16"></i>Plan</span><b></b><span><i data-ic="layers" data-s="16"></i>Build</span><b></b><span><i data-ic="sparkle" data-s="16"></i>Generate</span><b></b><span><i data-ic="check" data-s="16"></i>Iterate</span></div>
+    </div>
+    <div class="side" data-a style="--d:3">Ideas<br>Into<br>Impact</div>
+  </div>
+
+  <div class="tabs" data-a style="--d:3">
+    <button class="tab on" data-tab="builder">Builder</button>
+    <button class="tab" data-tab="templates">Templates</button>
+    <button class="tab" data-tab="library">Tool Library</button>
+    <button class="tab" data-tab="mine">My Workflows</button>
+    <button class="tab" data-tab="integrations">Integrations</button>
+    <button class="btn" id="newWf"><span data-ic="plus" data-s="16"></span> New Workflow</button>
+  </div>
+
+  <div class="glass board" data-a style="--d:4" id="tab-builder">
+    <div class="board-h">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px"><h3 id="wfName">Brand Campaign Generator</h3><button id="editName" style="color:var(--muted)" data-ic="pencil" data-s="15"></button></div>
+        <p id="wfDesc">Generate a complete brand campaign from a simple prompt</p>
+      </div>
+      <div class="acts">
+        <button class="btn ghost sm" id="save">Save</button>
+        <button class="btn ghost sm" id="share">Share</button>
+        <button class="btn ghost sm" id="run" title="Animated dry run"><span data-ic="eye" data-s="14"></span> Preview</button>
+        <button class="btn solid sm" id="runGuided"><span data-ic="play" data-s="14"></span> Run guided</button>
+      </div>
+    </div>
+    <div class="wf-wrap"><div class="canvas" id="flow"></div><aside class="wf-panel" id="wfPanel"></aside></div>
+    <div class="prompt">
+      <label>
+        <span data-ic="sparkle" style="color:#8fb6ff"></span>
+        <input id="wfPrompt" placeholder="Describe what you want to build…">
+        <button class="go" id="wfGo" aria-label="Generate" data-ic="up" data-s="16"></button>
+      </label>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+  <div id="tab-templates" hidden><div class="tpl-grid" id="tplGrid"></div></div>
+  <div id="tab-library" hidden>
+    <div class="glass card">
+      <div class="card-h"><h4>Add any of 750 tools as a step</h4><label class="mini-search" style="max-width:320px"><span data-ic="search" data-s="16"></span><input id="libQ" placeholder="Search the library…"></label></div>
+      <div class="lib-grid" id="libGrid"></div>
+    </div>
+  </div>
+  <div id="tab-mine" hidden><div class="glass" id="mineList"></div></div>
+  <div id="tab-integrations" hidden><div class="tpl-grid" id="intGrid"></div></div>
+  <div class="menu glass" id="stepMenu"></div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Create. Automate. Accelerate.</div><div class="pg">04 / 09<br>Workflow Builder</div></footer>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section class="page" id="p-projects">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Project command center</div>
+      <h1 data-a style="--d:1">Turn ideas into <span class="grad">impact.</span></h1>
+      <p class="lede" data-a style="--d:2">Plan. Build. Automate. Launch — all in one place.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Ideas<br>Into<br>Reality</div>
+  </div>
+
+  <div class="grid4" id="projStats" style="margin-top:34px"></div>
+
+  <div class="tabs" data-a style="--d:5">
+    <button class="tab on" data-ptab="board">Board</button>
+    <button class="tab" data-ptab="list">List</button>
+    <button class="btn" id="newTask"><span data-ic="plus" data-s="16"></span> New Task</button>
+  </div>
+  <div class="kanban" id="kanban" data-a style="--d:6"></div>
+  <div class="glass card" id="taskList" hidden></div>
+
+  <div class="glass copilot" data-a style="--d:7">
+    <div class="orb-wrap"><div class="orb"><i></i><i></i></div></div>
+    <div class="cp-body">
+      <div class="cp-h"><div><div class="eyebrow">Lunorb AI</div><h3>Your creative <span class="grad">co-pilot.</span></h3><p class="muted-sm">Plan, brainstorm, and build — grounded in your board and 750 tools.</p></div></div>
+      <div class="cp-actions">
+        <button class="cp-a" data-cp="summary"><span data-ic="sum" data-s="16"></span>Summarize this project</button>
+        <button class="cp-a" data-cp="next"><span data-ic="sparkle" data-s="16"></span>Generate next steps</button>
+        <button class="cp-a" data-cp="stack"><span data-ic="layers" data-s="16"></span>Recommend a tool stack</button>
+        <button class="cp-a" data-cp="split"><span data-ic="check" data-s="16"></span>Turn an idea into tasks</button>
+      </div>
+      <div class="cp-log" id="cpLog"></div>
+      <div class="prompt" style="margin-top:12px"><label><input id="cpIn" placeholder="Ask anything about your project…"><button class="go" id="cpGo" aria-label="Send" data-ic="arrow" data-s="16"></button></label></div>
+    </div>
+  </div>
+
+  <div class="sec-h" data-a style="--d:8"><h3>Quick actions</h3></div>
+  <div class="quick" id="quick" data-a style="--d:8"></div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Better tools. A brighter tomorrow.</div><div class="pg">05 / 09<br>Project Center</div></footer>
+</section>
+
+<!-- ================= COMMUNITY ================= -->
+<section class="page" id="p-community">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Creative together</div>
+      <h1 data-a style="--d:1">A global community<br>for <span class="grad">what’s next.</span></h1>
+      <p class="lede" data-a style="--d:2">Share. Remix. Get inspired. Create together.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Different<br>Creators<br>A brighter<br>Tomorrow</div>
+  </div>
+
+  <div class="tabs" data-a style="--d:3" id="comTabs">
+    <button class="tab on" data-ctab="all">For You</button>
+    <button class="tab" data-ctab="workflows">Workflows</button>
+    <button class="tab" data-ctab="stacks">Tool Stacks</button>
+    <button class="tab" data-ctab="creators">Creators</button>
+    <button class="btn" id="shareBtn"><span data-ic="plus" data-s="16"></span> Share</button>
+  </div>
+
+  <div data-csec="creators">
+    <div class="sec-h"><h3>Featured creators</h3><span class="muted-sm" id="followCount"></span></div>
+    <div class="creators" id="creators"></div>
+  </div>
+  <div data-csec="workflows">
+    <div class="sec-h"><h3>Popular workflows</h3><button class="link" data-go="builder" data-tab="templates">See all <span data-ic="arrow" data-s="14"></span></button></div>
+    <div class="grid3" id="popWf"></div>
+  </div>
+  <div class="two" data-csec="stacks">
+    <div>
+      <div class="sec-h"><h3>Curated collections</h3></div>
+      <div class="glass list" id="collections"></div>
+    </div>
+    <div>
+      <div class="sec-h"><h3>Remixable tool stacks</h3></div>
+      <div class="glass list" id="stacks"></div>
+    </div>
+  </div>
+  <div class="glass quote" data-a style="--d:9"><div class="scene fill" id="quoteScene"></div><p>“Creativity amplifies when it’s shared.”</p><span>Real people. Extraordinary possibilities.</span></div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>A more open, creative tomorrow.</div><div class="pg">06 / 09<br>Community</div></footer>
+  <p class="credit">Collection and workflow images via Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Neon-street-in-Tokyo-Japan.jpg" target="_blank" rel="noopener">Neon street in Tokyo</a> by Acediscovery and <a href="https://commons.wikimedia.org/wiki/File:Microphones_in_SPNN_Podcast_studio-01.jpg" target="_blank" rel="noopener">Microphones in SPNN Podcast studio</a> by Myotus (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>, cropped); ISS star trails by NASA/Don Pettit and Cosmic Cliffs by NASA, ESA, CSA and STScI (public domain); Colorful smoke by Pierre Blaché and Plasma thruster asteroid by Wikideas1 (CC0).</p>
+</section>
+
+<!-- ================= LEARN ================= -->
+<section class="page" id="p-learn">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Learning path</div>
+      <h1 data-a style="--d:1">Learn. Build. <span class="grad">Grow.</span></h1>
+      <p class="lede" data-a style="--d:2">Small steps today. A brighter you tomorrow — a guided path through the tools that matter.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Discover<br>Learn<br>Grow<br>Belong</div>
+  </div>
+
+  <div class="learn-top" style="margin-top:34px">
+    <div class="glass card path" data-a style="--d:3" id="pathCard"></div>
+    <div class="glass card" data-a style="--d:4" id="streakCard"></div>
+  </div>
+  <div class="two">
+    <div class="glass card" data-a style="--d:5" id="goalsCard"></div>
+    <div class="glass card" data-a style="--d:6" id="masteryCard"></div>
+  </div>
+  <div class="sec-h" data-a style="--d:7"><h3>Skill tracks</h3><span class="muted-sm">Each track is a guided path with curated tools</span></div>
+  <div class="grid4" id="tracks"></div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Progress creates possibility.</div><div class="pg">07 / 09<br>Learn</div></footer>
+</section>
+
+<!-- ================= WORKSPACE ================= -->
+<section class="page" id="p-workspace">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>My workspace</div>
+      <h1 data-a style="--d:1">Organize. Build.<br><span class="grad">Go further.</span></h1>
+      <p class="lede" data-a style="--d:2">Your tools. Your ideas. Your progress — all in one place.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Ideas<br>Into<br>Impact</div>
+  </div>
+
+  <div class="tabs" data-a style="--d:3">
+    <button class="tab on" data-wtab="overview">Overview</button>
+    <button class="tab" data-wtab="saved">Saved Tools</button>
+    <button class="tab" data-wtab="notes">Notes</button>
+    <button class="btn" id="newNote"><span data-ic="plus" data-s="16"></span> New Note</button>
+  </div>
+  <div class="grid4" id="wsStats"></div>
+  <div id="ws-overview">
+    <div class="two">
+      <div><div class="sec-h"><h3>Recent activity</h3></div><div class="glass list" id="activity"></div></div>
+      <div><div class="sec-h"><h3>Current projects</h3><button class="link" data-go="projects">Open board <span data-ic="arrow" data-s="14"></span></button></div><div class="glass list" id="wsProjects"></div></div>
+    </div>
+  </div>
+  <div id="ws-saved" hidden><div class="dir-grid" id="savedGrid" style="margin-top:20px"></div></div>
+  <div id="ws-notes" hidden><div class="notes" id="notes"></div></div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Create today. A brighter tomorrow.</div><div class="pg">08 / 09<br>Workspace</div></footer>
+</section>
+
+<!-- ================= INSIGHTS ================= -->
+<section class="page" id="p-insights">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-a>Insights &amp; analytics</div>
+      <h1 data-a style="--d:1">See your progress.<br>Discover <span class="grad">what’s next.</span></h1>
+      <p class="lede" data-a style="--d:2">Track your activity, uncover insights, and get personalized recommendations to help you go further.</p>
+    </div>
+    <div class="side" data-a style="--d:3">Know<br>Explore<br>Improve<br>Grow</div>
+  </div>
+
+  <div class="ins-top" data-a style="--d:3">
+    <div class="sel"><button id="rangeBtn"><span id="rangeLbl">Last 30 days</span> <span data-ic="down" data-s="14"></span></button>
+      <div class="menu glass" id="rangeMenu">
+        <div class="res" data-range="7">Last 7 days</div><div class="res" data-range="30">Last 30 days</div><div class="res" data-range="90">Last 90 days</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid4" id="kpis"></div>
+
+  <div class="two">
+    <div class="glass card" data-a style="--d:8">
+      <div class="card-h"><h4>Activity Overview</h4><div class="seg" id="mode"><button class="on" data-mode="daily">Daily</button><button data-mode="weekly">Weekly</button></div></div>
+      <div class="chart"><div class="yax" id="yax"></div><div class="plot"><div class="bars" id="bars"></div><div class="xax" id="xax"></div><div class="tip" id="tip"></div></div></div>
+      <div class="legend"><span><i style="background:#4c8dff"></i>Tools explored</span><span><i style="background:#22c55e"></i>Guided steps</span></div>
+    </div>
+    <div class="glass card" data-a style="--d:9">
+      <div class="card-h"><h4>Top Categories</h4></div>
+      <div class="donut-wrap">
+        <div class="donut"><svg viewBox="0 0 120 120" id="donut"></svg><div class="ctr"><div><b id="dVal">127</b><span id="dLbl">Tools explored</span></div></div></div>
+        <div class="cats" id="cats"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-h" data-a style="--d:10"><h3>Your Impact</h3><span style="font-size:13px;color:var(--muted)">Small steps. A bigger tomorrow.</span></div>
+  <div class="grid3" id="impact"></div>
+
+
+  <div class="sec-h" data-a style="--d:12"><h3>Recommended for You</h3><button class="link" data-go="builder" data-tab="templates">See all <span data-ic="arrow" data-s="14"></span></button></div>
+  <div class="grid3">
+    <div class="glass glow rec" data-a style="--d:13"><div class="badge sq" style="--c:#14b8a6" data-ic="link"></div><h4>Create a content engine</h4><p>Combine research, writing, and design tools to automate your content pipeline.</p><button class="btn sm" data-tpl="pipeline">Use template <span data-ic="arrow" data-s="14"></span></button></div>
+    <div class="glass glow rec" data-a style="--d:14"><div class="badge sq" style="--c:#4c8dff" data-ic="chart"></div><h4>Analyze your audience</h4><p>Turn data into insights with AI-powered research and visualization tools.</p><button class="btn sm" data-tpl="audience">Try this workflow <span data-ic="arrow" data-s="14"></span></button></div>
+    <div class="glass glow rec" data-a style="--d:15"><div class="badge sq" style="--c:#a855f7" data-ic="playsq"></div><h4>Turn ideas into video</h4><p>Transform your concepts into stunning videos with AI tools.</p><button class="btn sm" data-tpl="video">Get started <span data-ic="arrow" data-s="14"></span></button></div>
+  </div>
+
+  <footer class="pf"><div class="logo">LUN<span class="o"></span>RB</div><div>Insights today. A brighter tomorrow.</div><div class="pg">09 / 09<br>Insights</div></footer>
+</section>
+</main>
+
+<!-- tool drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer glass" id="drawer" aria-hidden="true"></aside>
+<!-- modal -->
+<div class="modal-wrap" id="modal"><div class="glass modal" id="modalBody"></div></div>
+
+<button class="helper-btn" id="helperBtn" aria-label="Ask Lunorb"><canvas class="globe" aria-hidden="true"></canvas><span>Ask Lunorb</span></button>
+<nav class="tabbar glass" id="tabbar" aria-label="Quick navigation">
+  <a href="#home" data-go="home"><span data-ic="sparkle" data-s="18"></span>Home</a>
+  <a href="#discover" data-go="discover"><span data-ic="search" data-s="18"></span>Discover</a>
+  <button data-helper><canvas class="globe" aria-hidden="true"></canvas>Ask</button>
+  <a href="#life" data-go="life"><span data-ic="check" data-s="18"></span>Everyday</a>
+  <a href="#workspace" data-go="workspace"><span data-ic="user" data-s="18"></span>Me</a>
+</nav>
+<div class="toast glass" id="toast"></div>
+
+<script src="data/tools.js"></script>
+<script src="js/app.js"></script>
+<script src="js/features.js"></script>
+<script src="js/life.js"></script>
+<script src="js/bento.js"></script>
+<script src="js/globe.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="js/config.js"></script>
+<script src="js/cloud.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>

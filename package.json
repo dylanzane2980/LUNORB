@@ -1,0 +1,20 @@
+{
+  "name": "lunorb",
+  "private": true,
+  "type": "module",
+  "description": "Lunorb — AI workspace. Static site in public/, serverless API in netlify/functions/.",
+  "scripts": {
+    "dev": "netlify dev",
+    "check": "node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "stripe": "^23.0.1"
+  },
+  "devDependencies": {
+    "netlify-cli": "^27.16.0"
+  }
+}

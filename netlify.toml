@@ -1,0 +1,31 @@
+# Static site in public/ (no build step) + serverless API in netlify/functions/.
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  # overrides any build command set in the Netlify UI; the site ships as-is
+  command = "echo 'Static site: no build step'"
+
+  [build.environment]
+    # skip devDependencies (netlify-cli) on Netlify; functions only need stripe + supabase-js
+    NODE_ENV = "production"
+
+[functions]
+  node_bundler = "esbuild"
+
+[dev]
+  framework = "#static"
+  publish = "public"
+  port = 8888
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

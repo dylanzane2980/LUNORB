@@ -42,7 +42,8 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY) {
   const { createClient } = await import('@supabase/supabase-js');
   const db = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY, { auth: { persistSession: false } });
   for (const t of ['profiles', 'user_state', 'subscriptions', 'workflows', 'workflow_likes', 'follows', 'creators']) {
-    const { error } = await db.from(t).select('*', { head: true, count: 'exact' }).limit(1);
+    // a normal GET, not head: HEAD responses carry no body, so a missing table would look like success
+    const { error } = await db.from(t).select('*').limit(1);
     error ? bad(`${t}: ${error.message}`) : ok(`${t} table is reachable`);
   }
 }

@@ -10,6 +10,10 @@ Lunorb is an AI-workspace product: a directory of 750 tools, guided "everyday" p
 
 **Product honesty rule.** This is a real product, so never show invented numbers: no fake ratings or reviews, follower or like counts, notifications, streaks or analytics. Show real data from `S.d` or Supabase. Where real data doesn't exist yet, show an honest empty state or the `Pending` pill (`.pending`, `pendingCard()`). Anything simulated must be labelled (the bento latency chart and terminal are).
 
+## Live setup
+
+Production is https://lunorb.netlify.app (Netlify project `lunorb`). It deploys automatically on every push to `main` of https://github.com/dylanzane2980/LUNORB; `npx netlify deploy --prod` also works. Server secrets are Netlify environment variables, and the Stripe webhook (test mode) points at `/api/stripe-webhook`. Netlify team login protection was turned off on request so the site and webhook are public. Netlify injects a free-tier "Powered by Netlify" badge script after `</body>`; `globe.js` adds `body.nf-badge` on DOMContentLoaded to lift the Ask Lunorb button above it.
+
 ## Layout
 
 ```

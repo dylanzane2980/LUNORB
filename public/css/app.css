@@ -230,3 +230,68 @@ button.of-orb:focus-visible{outline:1px solid rgba(152,213,238,.7);outline-offse
 #recent .tool{display:flex;flex-direction:column;align-items:flex-start}
 /* Netlify free-tier badge sits bottom-right; lift the Ask Lunorb button above it */
 body.nf-badge .helper-btn{bottom:76px}
+
+
+/* ---------- the ball (replaces the globe): an opaque dark body under a generated glow ---------- */
+.of-ball{position:absolute;left:49.8%;top:50.9%;width:51%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;z-index:1;
+  background:radial-gradient(circle at 50% 28%,#0d2252,#060e26 55%,#02060f)}
+.of-glow{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;will-change:opacity,transform;animation:ofBreath 7s cubic-bezier(.45,0,.55,1) infinite}
+.of-orb::before{display:none}
+.offering .of-ring{width:125%;height:33%;border-color:rgba(120,170,255,.55);box-shadow:0 0 16px rgba(60,130,255,.25)}
+.offering .of-ring.front{z-index:3}
+.of-home{--orb:.7}
+@keyframes ofBreath{50%{opacity:.86;transform:scale(1.015)}}
+/* motes drifting up through the light, like dust in a beam */
+.of-motes{inset:30% 25% 14%;z-index:3;pointer-events:none}
+.of-motes i{position:absolute;bottom:0;width:3px;height:3px;border-radius:50%;background:#cfe0ff;box-shadow:0 0 6px 1px rgba(90,150,255,.9);opacity:0;will-change:transform,opacity;animation:ofMote 9s linear infinite}
+.of-motes i:nth-child(1){left:12%;animation-delay:0s}.of-motes i:nth-child(2){left:30%;animation-delay:2.1s;animation-duration:11s}
+.of-motes i:nth-child(3){left:46%;animation-delay:4.3s}.of-motes i:nth-child(4){left:62%;animation-delay:1.2s;animation-duration:12s}
+.of-motes i:nth-child(5){left:78%;animation-delay:5.6s}.of-motes i:nth-child(6){left:22%;animation-delay:7s;animation-duration:10s}
+.of-motes i:nth-child(7){left:54%;animation-delay:3.4s;animation-duration:13s}.of-motes i:nth-child(8){left:88%;animation-delay:6.2s;animation-duration:11s}
+@keyframes ofMote{0%{opacity:0;transform:translate3d(0,0,0) scale(.6)}15%{opacity:.9}70%{opacity:.5}100%{opacity:0;transform:translate3d(8px,-240px,0) scale(1)}}
+@media (prefers-reduced-motion:reduce){.of-motes{display:none}}
+
+/* ---------- sign-in page in the mock's royal blue ---------- */
+body.gate{background:radial-gradient(120% 75% at 50% -12%,rgba(25,70,190,.32),rgba(8,24,70,.14) 45%,transparent 70%) fixed,#020713}
+body.gate .grad{background:linear-gradient(95deg,#4d7dff 0%,#6d97ff 55%,#a7c1ff 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 22px rgba(70,120,255,.35))}
+body.gate .badge-pill{border-color:rgba(90,140,255,.45);background:rgba(8,20,58,.55)}
+body.gate .badge-pill i{background:#4d8dff;box-shadow:0 0 10px #4d8dff}
+body.gate .auth-cta .btn,body.gate #authCard .auth-go{background:linear-gradient(90deg,#4aa0ff,#3a62f2);box-shadow:0 10px 34px -8px rgba(70,120,255,.75),inset 0 1px 0 rgba(255,255,255,.35)}
+body.gate .auth-stats span{color:#8fb0ff}
+body.gate .auth-stats>div{border-left-color:rgba(110,150,255,.22)}
+body.gate .auth-card{background:linear-gradient(180deg,rgba(12,24,58,.72),rgba(5,12,32,.86));border-color:rgba(100,150,255,.32);box-shadow:0 30px 80px -30px rgba(0,0,0,.85),inset 0 1px 0 rgba(170,200,255,.12)}
+body.gate #authCard .ifld input{background:rgba(6,14,38,.7);border-color:rgba(100,150,255,.28)}
+body.gate #authCard .ifld input:focus{border-color:rgba(100,160,255,.85);box-shadow:0 0 0 3px rgba(70,130,255,.15)}
+body.gate #authCard .ifld>.ic{color:#8fb0ff}
+body.gate #authCard .link{color:#6f9dff}
+body.gate .auth-tabs{border-bottom-color:rgba(100,150,255,.18)}
+body.gate .auth-tabs button.on::after{background:#4d8dff;box-shadow:0 0 10px #4d8dff}
+body.gate .of-auth::before{background:radial-gradient(closest-side,rgba(30,90,230,.32),rgba(16,50,150,.14) 45%,transparent)}
+body.gate .of-auth::after{background:radial-gradient(28% 14% at 50% 50%,rgba(220,232,255,.9),rgba(70,140,255,.45) 40%,transparent 100%),radial-gradient(50% 50% at 50% 50%,rgba(30,90,230,.35),rgba(16,50,150,.14) 50%,transparent 75%)}
+body.gate .of-pool{background:radial-gradient(50% 32% at 50% 50%,rgba(220,232,255,.85),rgba(70,140,255,.5) 22%,rgba(30,90,230,.18) 55%,transparent 75%)}
+body.gate .of-beam{background:radial-gradient(50% 50% at 50% 50%,rgba(60,130,255,.3),rgba(30,90,230,.1) 55%,transparent 75%)}
+body.gate .of-auth .of-hand{filter:brightness(.55) contrast(1.2) saturate(1.2) hue-rotate(14deg)}
+body.gate nav{background:linear-gradient(180deg,rgba(2,7,19,.8),rgba(2,7,19,.3))}
+
+/* remember me + social sign-in */
+.auth-links{justify-content:space-between;align-items:center}
+.remember{display:flex;align-items:center;gap:9px;font-size:12.5px;color:#c9d6f0;cursor:pointer;user-select:none}
+.remember input{position:absolute;opacity:0;width:1px;height:1px}
+.remember i{width:16px;height:16px;border-radius:4px;border:1px solid rgba(120,160,255,.5);background:rgba(6,14,38,.7);display:grid;place-items:center;transition:background .2s,border-color .2s}
+.remember input:checked+i{background:#3f73f5;border-color:#3f73f5}
+.remember input:checked+i::after{content:"";width:8px;height:4px;border:2px solid #fff;border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+.remember input:focus-visible+i{outline:2px solid #6f9dff;outline-offset:2px}
+.auth-or{display:flex;align-items:center;gap:12px;margin:18px 0 12px;font-size:12px;color:var(--muted)}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:rgba(120,160,255,.18)}
+.auth-social{display:flex;justify-content:center;gap:18px}
+.auth-social button{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(10,20,50,.7);border:1px solid rgba(120,160,255,.25);transition:border-color .25s,transform .25s,background .25s}
+.auth-social button:hover{border-color:rgba(140,180,255,.6);background:rgba(20,40,90,.7);transform:translateY(-1px)}
+.auth-social button:disabled{opacity:.6}
+
+/* round w2: measured fixes */
+.of-auth{--orb:.8}
+.auth{grid-template-rows:minmax(0,1fr)} /* a taller card (e.g. with a notice) must not stretch the row and push the title down */
+.auth-card{align-self:start;margin:124px 14px 0 -14px}
+.auth-card form{gap:11px;margin-top:16px}
+body.gate .of-auth::before{width:1100px;height:900px;margin:-430px 0 0 -550px;background:radial-gradient(closest-side,rgba(40,105,255,.42),rgba(20,60,180,.18) 40%,transparent)}
+@media (max-width:1100px){.auth{grid-template-rows:auto}.auth-card{margin:0;align-self:center}}

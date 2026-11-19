@@ -2,7 +2,14 @@
 const CFG=window.LUNORB_CONFIG||{};
 const BACKEND=!!(CFG.supabaseUrl&&CFG.supabaseKey&&window.supabase);
 const URL_HASH=location.hash,RECOVERY=/type=recovery/.test(URL_HASH);
-const sb=BACKEND?supabase.createClient(CFG.supabaseUrl,CFG.supabaseKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
+const REMEMBER=()=>{try{return localStorage.getItem('lunorb.remember')!=='0'}catch{return true}};
+const AUTH_STORE={getItem:k=>{try{return localStorage.getItem(k)??sessionStorage.getItem(k)}catch{return null}},
+  setItem:(k,v)=>{try{const[keep,drop]=REMEMBER()?[localStorage,sessionStorage]:[sessionStorage,localStorage];keep.setItem(k,v);drop.removeItem(k)}catch{}},
+  removeItem:k=>{try{localStorage.removeItem(k);sessionStorage.removeItem(k)}catch{}}};
+const sb=BACKEND?supabase.createClient(CFG.supabaseUrl,CFG.supabaseKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:AUTH_STORE}}):null;
+// which sign-in providers are switched on in Supabase (also tells us if the account server is reachable at all)
+let AUTH_INFO=null;
+const authInfo=()=>AUTH_INFO||(AUTH_INFO=fetch(CFG.supabaseUrl+'/auth/v1/settings',{headers:{apikey:CFG.supabaseKey}}).then(r=>r.ok?r.json():Promise.reject(new Error('settings '+r.status))).then(j=>({up:true,ext:j.external||{}})).catch(()=>{AUTH_INFO=null;return{up:false,ext:{}}}));
 const ME={user:null,profile:null,sub:{plan:'free'},token:null};
 let gated=false,authMode=RECOVERY?'update':'signin',authNotice='',authEmail='';
 const CLEAN=()=>({saved:[],follows:[],likes:[],goals:[],lesson:0,notes:[],activity:[],board:[],runs:{},daily:{},catUse:{},toolUse:{},recent:[]});
@@ -190,15 +197,20 @@ $('#avatarMenu').addEventListener('click',e=>{const a=e.target.closest('[data-ac
 
 /* ---------- auth page ---------- */
 const friendly=e=>{const m=e?.message||String(e);
-  return/invalid login credentials/i.test(m)?'That email and password don’t match.':/email not confirmed/i.test(m)?'Confirm your email first. Check your inbox for the link.'
+  return/failed to fetch|networkerror|load failed|fetch failed/i.test(m)?'Can’t reach the Lunorb sign-in server right now. Check your connection, or try again in a few minutes.'
+    :/invalid login credentials/i.test(m)?'That email and password don’t match.':/email not confirmed/i.test(m)?'Confirm your email first. Check your inbox for the link.'
     :/rate limit|too many/i.test(m)?'Too many attempts. Wait a minute and try again.':/already registered/i.test(m)?'An account with that email already exists. Try signing in.':m};
 const AUTH={
-  signin:{h:'Welcome back',p:'Sign in to continue your journey.',btn:'Sign in',f:['email','password'],extra:'<button type="button" class="link" data-amode="reset">Forgot password?</button>',foot:'New to Lunorb? <button type="button" class="link" data-amode="signup">Create an account</button>'},
-  signup:{h:'Create your account',p:'Free to start. No card needed.',btn:'Create account',f:['name','email','newpw'],foot:'Already have an account? <button type="button" class="link" data-amode="signin">Sign in</button>'},
+  signin:{h:'Welcome back',p:'Sign in to continue your journey.',btn:'Sign In',f:['email','password'],extra:'<label class="remember"><input type="checkbox" id="remember"><i></i>Remember me</label><button type="button" class="link" data-amode="reset">Forgot password?</button>',social:1,foot:'New to Lunorb? <button type="button" class="link" data-amode="signup">Create an account</button>'},
+  signup:{h:'Create your account',p:'Free to start. No card needed.',btn:'Create account',social:1,f:['name','email','newpw'],foot:'Already have an account? <button type="button" class="link" data-amode="signin">Sign in</button>'},
   reset:{h:'Reset your password',p:'We’ll email you a link to choose a new one.',btn:'Send reset link',f:['email'],foot:'<button type="button" class="link" data-amode="signin">Back to sign in</button>'},
   update:{h:'Choose a new password',p:'Use at least 8 characters.',btn:'Save password',f:['newpw']}};
 // icon fields: the label text stays for screen readers; the eye toggles password visibility (handled below)
 const IN=(icon,label,input,eye)=>`<label class="fld ifld"><span class="sr">${label}</span>${ic(icon,17)}${input}${eye?`<button type="button" class="eye" data-eye aria-label="Show password">${ic('eye',17)}</button>`:''}</label>`;
+// brand marks for the social buttons (official shapes, as providers ask)
+const SOCIAL=[['google','Google','<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>'],
+  ['github','GitHub','<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>'],
+  ['apple','Apple','<svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM13.9 5c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>']];
 const FIELD={name:IN('user','Your name','<input name="name" autocomplete="name" maxlength="60" placeholder="Your name" required>'),
   email:IN('mail','Email','<input type="email" name="email" autocomplete="email" placeholder="Enter your email address" required>'),
   password:IN('lock','Password','<input type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required>',1),
@@ -212,12 +224,21 @@ function renderAuth(){
   const tabs=authMode==='signin'||authMode==='signup'?`<div class="auth-tabs" role="tablist"><button type="button" role="tab" data-amode="signin" class="${authMode==='signin'?'on':''}" aria-selected="${authMode==='signin'}">Sign in</button><button type="button" role="tab" data-amode="signup" class="${authMode==='signup'?'on':''}" aria-selected="${authMode==='signup'}">Create account</button></div>`:'';
   c.innerHTML=`<h2>${f.h}</h2><p class="muted-sm">${f.p}</p>${tabs}${authNotice?`<div class="auth-msg" role="alert">${esc(authNotice)}</div>`:''}
     <form id="authForm">${f.f.map(k=>FIELD[k]).join('')}${f.extra?`<div class="auth-links">${f.extra}</div>`:''}<button class="btn solid auth-go" type="submit">${f.btn} ${ic('arrow',15)}</button></form>
+    ${f.social?`<div class="auth-or"><span>or continue with</span></div><div class="auth-social">${SOCIAL.map(([p,n,svg])=>`<button type="button" data-oauth="${p}" aria-label="Continue with ${n}" title="Continue with ${n}">${svg}</button>`).join('')}</div>`:''}
     ${f.foot?`<p class="auth-foot">${f.foot}</p>`:''}`;
+  const rm=c.querySelector('#remember');if(rm){rm.checked=REMEMBER();rm.onchange=()=>{try{localStorage.setItem('lunorb.remember',rm.checked?'1':'0')}catch{}}}
+  if(authMode==='signin'&&!authNotice)authInfo().then(i=>{if(!i.up&&authMode==='signin'&&!c.querySelector('.auth-msg')){c.querySelector('form')?.insertAdjacentHTML('beforebegin','<div class="auth-msg" role="status">Sign-in is offline: Lunorb’s account server isn’t responding. Please try again a little later.</div>')}});
   setTimeout(()=>c.querySelector('input')?.focus({preventScroll:true}),50); // keep the hero in view; the form is one scroll away on phones
 }
 $('#authCard').addEventListener('click',async e=>{
   const eye=e.target.closest('[data-eye]');if(eye){const i=eye.parentElement.querySelector('input'),show=i.type==='password';i.type=show?'text':'password';eye.setAttribute('aria-label',show?'Hide password':'Show password');eye.classList.toggle('on',show);return}
   const m=e.target.closest('[data-amode]');if(m){authMode=m.dataset.amode;authNotice='';renderAuth();return}
+  const o=e.target.closest('[data-oauth]');if(o){const p=o.dataset.oauth,name=o.getAttribute('aria-label').replace('Continue with ','');o.disabled=true;
+    const i=await authInfo();
+    if(!i.up){authNotice='Can’t reach the Lunorb sign-in server right now. Please try again in a few minutes.';renderAuth();return}
+    if(!i.ext[p]){authNotice=`${name} sign-in isn’t switched on yet. Use your email and password for now.`;renderAuth();return}
+    const{error}=await sb.auth.signInWithOAuth({provider:p,options:{redirectTo:location.origin+location.pathname}});
+    if(error){authNotice=friendly(error);renderAuth()}return}
   if(e.target.closest('#authRetry'))location.reload();
   if(e.target.closest('#authOut')){await sb.auth.signOut({scope:'local'});location.replace(location.pathname)}
 });

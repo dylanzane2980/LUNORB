@@ -51,7 +51,9 @@
 /* boot + gate: while signed out only the logo and the auth page show */
 .boot-loader{display:none}
 body.booting .boot-loader{display:flex;flex-direction:column;align-items:center;gap:14px;padding:30vh 0;font-size:13px;color:var(--muted)}
-body.booting .boot-loader .globe{width:64px;height:64px}
+body.booting .boot-loader .boot-mk{width:132px;height:auto;animation:mkPulse 2.4s ease-in-out infinite}
+@keyframes mkPulse{50%{opacity:.6;filter:brightness(1.25)}}
+.auth-mk{display:block;width:150px;height:auto;margin:0 0 10px -22px}
 body.gate nav .links,body.gate nav .nav-r,body.gate .helper-btn,body.gate .tabbar{display:none}
 
 /* auth page */
@@ -73,6 +75,7 @@ body.gate nav .links,body.gate nav .nav-r,body.gate .helper-btn,body.gate .tabba
 .auth-row{display:flex;gap:10px;margin-top:18px}
 .auth-card code{font-size:12px;padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.07)}
 .link{color:#8fb6ff}
+@media (max-width:600px){.auth-mk{width:130px;margin-left:-8px}}
 @media (max-width:900px){.auth{grid-template-columns:1fr;gap:30px;min-height:0}.auth-copy h1{font-size:40px}}
 
 /* plans + account */

@@ -1,1 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><radialGradient id="g" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#cfe1ff"/><stop offset=".3" stop-color="#4c7cff"/><stop offset=".75" stop-color="#0b1a4a"/><stop offset="1" stop-color="#030712"/></radialGradient></defs><circle cx="32" cy="32" r="26" fill="url(#g)"/><circle cx="32" cy="32" r="26" fill="none" stroke="#8fb6ff" stroke-opacity=".7" stroke-width="2"/><path d="M14 52 50 12" stroke="#e6f0ff" stroke-width="4" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Lunorb app icon: dark tile, glowing rim, monolith on the horizon -->
+  <defs>
+    <radialGradient id="tile" cx="32" cy="40" r="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0d1a36"/>
+      <stop offset=".6" stop-color="#060b18"/>
+      <stop offset="1" stop-color="#03050b"/>
+    </radialGradient>
+    <linearGradient id="bord" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#dbe7ff" stop-opacity=".85"/>
+      <stop offset=".5" stop-color="#7fa6ee" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#c3d6ff" stop-opacity=".8"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="32" cy="42" r="26" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7aa8ff" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#1b2f66" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="4" y1="0" x2="60" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5d8ff0" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#5d8ff0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="planet" x1="0" y1="41" x2="0" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b4f9a" stop-opacity=".5"/>
+      <stop offset=".3" stop-color="#050a16"/>
+      <stop offset="1" stop-color="#03050b"/>
+    </linearGradient>
+    <linearGradient id="face" x1="0" y1="12" x2="0" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a9c6f7" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <radialGradient id="flare" cx="32" cy="42" r="1" gradientTransform="translate(32 42) scale(15 2) translate(-32 -42)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#4c8dff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="c"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#tile)"/>
+  <g clip-path="url(#c)">
+    <ellipse cx="32" cy="40" rx="28" ry="22" fill="url(#halo)"/>
+    <path d="M2 54 A70 70 0 0 1 62 54 V64 H2 Z" fill="url(#planet)"/>
+    <path d="M2 54 A70 70 0 0 1 62 54" fill="none" stroke="url(#rim)" stroke-width="1.2"/>
+    <polygon points="28.5,42 28.5,18 35.5,10 35.5,42" fill="url(#face)"/>
+    <polygon points="28.5,42 28.5,18 30.2,16 30.2,42" fill="#ffffff" opacity=".6"/>
+    <ellipse cx="32" cy="42" rx="15" ry="2" fill="url(#flare)"/>
+  </g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.5" fill="none" stroke="url(#bord)" stroke-width=".8"/>
+</svg>

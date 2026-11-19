@@ -1,4 +1,4 @@
-/* ---------- Ask Lunorb globe: a small rotating 3D globe with an orbit ring (echoes the Ø in the logo) ---------- */
+/* ---------- Ask Lunorb globe: a small rotating 3D globe with an orbit ring (echoes the planet in the logo) ---------- */
 const GLOBE={
   pts:(()=>{const n=420,ga=Math.PI*(3-Math.sqrt(5)),P=[];for(let i=0;i<n;i++){const y=1-i/(n-1)*2,r=Math.sqrt(1-y*y),t=ga*i;P.push([Math.cos(t)*r,y,Math.sin(t)*r])}return P})(),
   // soft blobs of "land" from a few low-frequency waves, so the dots read as continents rather than a uniform grid

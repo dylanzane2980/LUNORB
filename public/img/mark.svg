@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90">
+  <!-- Lunorb mark: a glass monolith rising from a glowing planet horizon -->
+  <defs>
+    <radialGradient id="halo" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#7aa8ff" stop-opacity=".42"/>
+      <stop offset=".45" stop-color="#3f6fd6" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#1b2f66" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="planet" x1="0" y1="66" x2="0" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b4f9a" stop-opacity=".55"/>
+      <stop offset=".2" stop-color="#0a1428" stop-opacity=".95"/>
+      <stop offset=".75" stop-color="#04070f" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#04070f" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="120" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5d8ff0" stop-opacity="0"/>
+      <stop offset=".3" stop-color="#8fb6ff" stop-opacity=".75"/>
+      <stop offset=".5" stop-color="#ffffff"/>
+      <stop offset=".7" stop-color="#8fb6ff" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#5d8ff0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="face" x1="0" y1="10" x2="0" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9dbcf2" stop-opacity=".55"/>
+      <stop offset=".45" stop-color="#c4d8ff" stop-opacity=".78"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="14" x2="0" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <radialGradient id="flare" cx="60.5" cy="68.6" r="1" gradientTransform="translate(60.5 68.6) scale(30 3.2) translate(-60.5 -68.6)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".25" stop-color="#cfe0ff" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#4c8dff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="beam" cx="60.5" cy="68" r="1" gradientTransform="translate(60.5 68) scale(9 30) translate(-60.5 -68)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#cfe0ff" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#4c8dff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="1.4"/></filter>
+  </defs>
+
+  <ellipse cx="60" cy="58" rx="58" ry="31" fill="url(#halo)"/>
+  <ellipse cx="60.5" cy="52" rx="10" ry="17" fill="url(#beam)"/>
+
+  <!-- planet + rim -->
+  <path d="M-2 88 A124 124 0 0 1 122 88 V90 H-2 Z" fill="url(#planet)"/>
+  <path d="M-2 88 A124 124 0 0 1 122 88" fill="none" stroke="url(#rim)" stroke-width="3" opacity=".6" filter="url(#soft)"/>
+  <path d="M-2 88 A124 124 0 0 1 122 88" fill="none" stroke="url(#rim)" stroke-width="1"/>
+
+  <!-- monolith -->
+  <polygon points="55,68.5 55,24 66,11 66,68.2" fill="url(#face)"/>
+  <polygon points="55,68.5 55,24 57.6,20.9 57.6,68.5" fill="#ffffff" opacity=".55"/>
+  <polyline points="55,68.5 55,24 66,11" fill="none" stroke="url(#edge)" stroke-width=".7"/>
+  <line x1="66" y1="11" x2="66" y2="68.2" stroke="#dbe8ff" stroke-opacity=".6" stroke-width=".5"/>
+
+  <!-- base flare -->
+  <ellipse cx="60.5" cy="68.6" rx="30" ry="3.2" fill="url(#flare)"/>
+  <ellipse cx="60.5" cy="68.4" rx="9" ry=".8" fill="#ffffff" filter="url(#soft)"/>
+  <ellipse cx="60.5" cy="68.3" rx="3.5" ry=".45" fill="#ffffff"/>
+</svg>

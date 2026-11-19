@@ -7,6 +7,7 @@
 <meta name="description" content="Lunorb is an AI workspace: 750 tools, guided everyday playbooks and a workflow builder that syncs across your devices.">
 <meta name="theme-color" content="#030712">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
@@ -21,7 +22,7 @@
 
 <nav>
   <div class="wrap">
-    <div class="logo" data-go="home" role="link" tabindex="0">LUN<span class="o"></span>RB</div>
+    <div class="logo" data-go="home" role="link" tabindex="0" aria-label="Lunorb home"><img class="mk" src="img/mark.svg" alt=""><span class="sep"></span>LUN<span class="o"></span>RB</div>
     <div class="links" id="links">
       <a href="#home" data-go="home">Home</a>
       <a href="#discover" data-go="discover">Discover</a>
@@ -54,12 +55,13 @@
 </nav>
 
 <main class="wrap">
-<div class="boot-loader" aria-live="polite"><canvas class="globe" aria-hidden="true"></canvas><span>Loading your workspace…</span></div>
+<div class="boot-loader" aria-live="polite"><img class="boot-mk" src="img/mark.svg" alt=""><span>Loading your workspace…</span></div>
 
 <!-- ================= AUTH ================= -->
 <section class="page" id="p-auth">
   <div class="auth">
     <div class="auth-copy">
+      <img class="auth-mk" src="img/mark.svg" alt="" data-a>
       <div class="eyebrow" data-a>Welcome to Lunorb</div>
       <h1 data-a style="--d:1">Your AI workspace<br>for bigger <span class="grad">possibilities.</span></h1>
       <p class="lede" data-a style="--d:2">Find the right tools, follow guided playbooks, and build workflows that get real things done.</p>

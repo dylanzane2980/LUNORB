@@ -18,6 +18,10 @@
   const auth=$('#ofAuth'),card=$('#authCard');
   if(auth&&card)card.addEventListener('input',()=>{const f=[...card.querySelectorAll('input')];auth.style.setProperty('--charge',f.length?(f.filter(i=>i.value.trim()).length/f.length).toFixed(2):0)});
 
+  // sign-in: Get Started switches the card to sign-up and brings it into view
+  const gs=$('#getStarted');if(gs)gs.onclick=()=>{if(typeof authMode!=='undefined'&&BACKEND){authMode='signup';authNotice='';renderAuth()}
+    card.scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'});setTimeout(()=>card.querySelector('input')?.focus({preventScroll:true}),reduced?0:450)};
+
   // Home: the orb is Ask Lunorb; the label above it cycles through real example questions
   const ask=$('#ofAskQ'),orb=$('#ofOrb'),btn=$('#ofAsk');if(!ask)return;
   const EX=(typeof HELPER_EX!=='undefined'&&HELPER_EX.length?HELPER_EX:['Plan meals for the week']).map(x=>x[0].toUpperCase()+x.slice(1));

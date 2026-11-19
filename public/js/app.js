@@ -399,10 +399,14 @@ const GREEN=strip([[0,'rgba(15,94,131,0)'],[.3,'rgba(23,134,180,.24)'],[.62,'rgb
 const CYAN=strip([[0,'rgba(10,60,85,0)'],[.35,'rgba(15,94,131,.22)'],[.7,'rgba(79,179,218,.35)'],[.92,'rgba(225,242,250,.85)'],[1,'rgba(225,242,250,0)']]);
 const VIOLET=strip([[0,'rgba(10,60,85,0)'],[.4,'rgba(15,94,131,.3)'],[.85,'rgba(23,134,180,.6)'],[1,'rgba(23,134,180,0)']]);
 const SCN={
- home:{seed:11,trees:.6,figure:false,r:[
-  {u0:.22,u1:1.08,y0:0.65,y1:0.46,amp:.07,f:2.2,h:0.84,a:1,ph:0,sp:1,s:GREEN},
-  {u0:.45,u1:1.1,y0:0.54,y1:0.41,amp:.05,f:1.6,h:0.61,a:.7,ph:2,sp:.7,s:VIOLET},
-  {u0:.05,u1:.6,y0:0.68,y1:0.62,amp:.05,f:1.4,h:0.54,a:.55,ph:4,sp:.8,s:CYAN}]},
+ home:{seed:11,trees:.6,figure:false,void:true,floorX:1290,r:[
+  {u0:.5,u1:1.12,y0:0.6,y1:0.5,amp:.07,f:2.2,h:0.84,a:1,ph:0,sp:1,s:GREEN}, // brightest curtain sits behind the hand, not the headline
+  {u0:.3,u1:1.1,y0:0.5,y1:0.41,amp:.05,f:1.6,h:0.61,a:.6,ph:2,sp:.7,s:VIOLET},
+  {u0:.02,u1:.5,y0:0.5,y1:0.46,amp:.05,f:1.4,h:0.5,a:.32,ph:4,sp:.8,s:CYAN}]},
+ auth:{seed:17,void:true,floorX:800,r:[
+  {u0:.1,u1:.75,y0:0.65,y1:0.46,amp:.07,f:2.2,h:0.84,a:1,ph:0,sp:1,s:GREEN},
+  {u0:.55,u1:1.1,y0:0.54,y1:0.41,amp:.05,f:1.6,h:0.61,a:.7,ph:2,sp:.7,s:VIOLET},
+  {u0:-.05,u1:.45,y0:0.68,y1:0.62,amp:.05,f:1.4,h:0.54,a:.55,ph:4,sp:.8,s:CYAN}]},
  builder:{seed:23,trees:.3,figure:false,planet:true,r:[
   {u0:.4,u1:1.1,y0:0.52,y1:0.68,amp:.08,f:2,h:0.81,a:.9,ph:1,sp:1,s:GREEN},
   {u0:.55,u1:1.05,y0:0.44,y1:0.53,amp:.05,f:1.5,h:0.68,a:.8,ph:3,sp:.6,s:VIOLET}]},
@@ -436,7 +440,36 @@ function trees(seed,dens){
 // graded to moonlight offline (img/mountains-*.webp, also CC BY-SA 3.0). Static bitmaps instead of SVG filters keep the
 // aurora and meteors animating smoothly.
 const MTN={src:'img/mountains-night.webp',ref:'img/mountains-reflect.webp',x:-120,w:1840,h:236,y:386}; // overscan: the scene's slice scaling crops the sides
+// Mountain-free "void" scene (c.void): soft cloud banks under the aurora and a dark glossy floor with perspective rings
+// centred on c.floorX. Gradients and opacity only, never SVG filters (see "Scene performance" in CLAUDE.md).
+function voidSVG(c){
+  const id='s'+c.seed+'v',R=rng(c.seed),fx=c.floorX??800,f=n=>n.toFixed(1);
+  const bank=(yTop,yLow,wMin,wMax,k)=>{ // cumulus-like rim: rounded cubic billows between pinched troughs, on a slow roll
+    const roll=x=>Math.sin(x*.0021+k*1.7+c.seed)*(yLow-yTop)*.16,trough=x=>yLow-R()*(yLow-yTop)*.35+roll(x);
+    let x=-200,y=trough(x),d=`M${x} ${f(y)}`;
+    while(x<1800){const w=wMin+R()*(wMax-wMin),nx=x+w,ny=trough(nx),top=yTop+R()*(yLow-yTop)*.5+roll(x+w/2),cy=(top-.25*(y+ny)/2)/.75;
+      d+=`C${f(x+w*.18)} ${f(cy)} ${f(nx-w*.18)} ${f(cy)} ${f(nx)} ${f(ny)}`;x=nx;y=ny}
+    return{rim:d,fill:d+`L${f(x)} ${HZ+2}L-200 ${HZ+2}Z`};
+  };
+  const L=[[330,400,160,340,.18],[388,452,170,380,.14],[446,508,130,300,.1]].map(([t,b,w0,w1,lit],k)=>({t,b,lit,...bank(t,b,w0,w1,k)}));
+  const rings=[260,448,636,824,1012,1200].map((rx,i)=>`<ellipse cx="${fx}" cy="${HZ+40}" rx="${rx}" ry="${f(rx*.08)}" fill="none" stroke="rgba(79,179,218,${[.22,.18,.14,.1,.07,.05][i]})" stroke-width="1"/>`).join('');
+  return`<defs>
+    ${L.map((l,k)=>`<linearGradient id="${id}c${k}" gradientUnits="userSpaceOnUse" x1="0" y1="${l.t}" x2="0" y2="${l.b}"><stop offset="0" stop-color="rgba(4,32,46,0)"/><stop offset=".3" stop-color="rgba(3,22,33,.82)"/><stop offset="1" stop-color="rgba(2,12,19,.95)"/></linearGradient><linearGradient id="${id}r${k}" gradientUnits="userSpaceOnUse" x1="0" y1="${l.t}" x2="0" y2="${l.b}"><stop offset="0" stop-color="rgba(79,179,218,${l.lit})"/><stop offset="1" stop-color="rgba(79,179,218,0)"/></linearGradient>`).join('')}
+    <radialGradient id="${id}hz" cx="${fx/1600}" cy="1" r=".6"><stop offset="0" stop-color="rgba(79,179,218,.12)"/><stop offset="1" stop-color="rgba(79,179,218,0)"/></radialGradient>
+    <linearGradient id="${id}fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#020c13" stop-opacity=".82"/><stop offset="1" stop-color="#01070b"/></linearGradient>
+    <radialGradient id="${id}gl"><stop offset="0" stop-color="rgba(79,179,218,.35)"/><stop offset="1" stop-color="rgba(79,179,218,0)"/></radialGradient>
+    <linearGradient id="${id}hl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(152,213,238,0)"/><stop offset=".5" stop-color="rgba(152,213,238,.16)"/><stop offset="1" stop-color="rgba(152,213,238,0)"/></linearGradient>
+    <clipPath id="${id}below"><rect x="-200" y="${HZ}" width="2000" height="${800-HZ}"/></clipPath></defs>
+  <rect x="-200" y="260" width="2000" height="${HZ-260}" fill="url(#${id}hz)"/>
+  ${L.map((l,k)=>`<path d="${l.fill}" fill="url(#${id}c${k})"/><path d="${l.rim}" fill="none" stroke="url(#${id}r${k})" stroke-opacity=".35" stroke-width="7"/><path d="${l.rim}" fill="none" stroke="url(#${id}r${k})" stroke-width="1.5"/>`).join('')}
+  <rect x="-200" y="${HZ}" width="2000" height="${800-HZ}" fill="url(#${id}fl)"/>
+  <ellipse cx="${fx}" cy="${HZ+10}" rx="420" ry="60" fill="url(#${id}gl)"/>
+  <g clip-path="url(#${id}below)">${rings}</g>
+  <rect x="-200" y="${HZ-15}" width="2000" height="30" fill="url(#${id}hl)"/>
+  <rect x="-200" y="${HZ-.75}" width="2000" height="1.5" fill="rgba(152,213,238,.35)"/>`;
+}
 function sceneSVG(c){
+  if(c.void)return voidSVG(c);
   const id='s'+c.seed,M=MTN,fx=c.seed%2===0?'transform="translate(1600 0) scale(-1 1)"':''; // even seeds mirror the range for variety
   const fg=ridge(c.seed+13,530,556,.6),tr=`<path d="${trees(c.seed,c.trees)}" fill="#02050d"/>`;
   const photo=(href,y)=>`<image href="${href}" x="${M.x}" y="${y}" width="${M.w}" height="${M.h}" preserveAspectRatio="none" ${fx}/>`;

@@ -57,10 +57,12 @@ body.gate nav .links,body.gate nav .nav-r,body.gate .helper-btn,body.gate .tabba
 
 /* auth page */
 /* desktop: title │ the offering │ form — the hand has its own column so nothing overlaps at any height */
-.auth{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 300px minmax(0,380px);gap:36px;align-items:center;min-height:max(620px,calc(100vh - 230px));padding:24px 0}
+.auth{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 220px minmax(0,370px);gap:32px;align-items:center;min-height:700px;padding:24px 0}
+/* signed out: a taller scene drops the floor horizon to ~730px so the hand rises out of it */
+body.gate .scene{height:1040px}
 .auth-copy{grid-area:1/1;position:relative;z-index:1;text-shadow:0 2px 24px rgba(2,12,19,.9)}
 .auth-card{grid-area:1/3;position:relative;z-index:1}
-.auth-copy h1{font-weight:300;font-size:clamp(36px,3.4vw,50px);line-height:1.04;letter-spacing:-.02em;margin:14px 0 22px}
+.auth-copy h1{font-weight:300;font-size:clamp(36px,3.6vw,52px);line-height:1.04;letter-spacing:-.02em;margin:14px 0 22px}
 .auth-points{list-style:none;margin-top:28px;display:grid;gap:12px;font-size:15px;color:#c3dbe6}
 .auth-points li{display:flex;align-items:center;gap:12px}
 .auth-points li>span{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;color:#98d5ee;background:rgba(79,179,218,.12);border:1px solid rgba(79,179,218,.25)}
@@ -79,59 +81,98 @@ body.gate nav .links,body.gate nav .nav-r,body.gate .helper-btn,body.gate .tabba
 .link{color:#98d5ee}
 @media (max-width:900px){.auth{grid-template-columns:1fr;gap:30px;min-height:0}.auth-copy h1{font-size:40px}}
 
-/* ---------- The Offering: hand + live orb ---------- */
-.offering{--px:0;--py:0;--charge:0;--w:400px;--oy:30%;position:relative;width:var(--w);aspect-ratio:2/3;pointer-events:none}
+/* ---------- The Offering: hand + live orb ----------
+   Motion is transform/opacity only on promoted layers, on long eased loops, so it stays smooth over the aurora. */
+.offering{--px:0;--py:0;--charge:0;--w:400px;--oy:30%;--orb:.36;position:relative;width:var(--w);aspect-ratio:2/3;pointer-events:none}
 .offering>*{position:absolute}
-/* the photo is screened onto the page, so its dark backdrop disappears and only the lit hand remains */
-.of-hand{inset:auto 0 0;width:100%;height:auto;z-index:2;
-  -webkit-mask-image:linear-gradient(180deg,transparent 4%,#000 34%,#000 82%,transparent),radial-gradient(70% 60% at 50% 55%,#000 55%,transparent);
-  -webkit-mask-composite:source-in;mask-image:linear-gradient(180deg,transparent 4%,#000 34%,#000 82%,transparent),radial-gradient(70% 60% at 50% 55%,#000 55%,transparent);mask-composite:intersect;
-  animation:ofHand 9s ease-in-out infinite}
-/* planet horizon behind the wrist: the logo's arc, breathing slowly */
-.of-horizon{left:-60%;right:-60%;top:66%;height:30%;border-radius:50%/100% 100% 0 0;z-index:1;
-  background:radial-gradient(60% 18% at 50% 0,rgba(79,179,218,.22),transparent 70%),linear-gradient(180deg,rgba(4,32,46,.85),rgba(2,12,19,0) 80%);
-  box-shadow:inset 0 1px 0 rgba(152,213,238,.55),0 -18px 60px -20px rgba(79,179,218,.5);
-  -webkit-mask-image:linear-gradient(90deg,transparent 12%,#000 38%,#000 62%,transparent 88%);mask-image:linear-gradient(90deg,transparent 12%,#000 38%,#000 62%,transparent 88%);
-  animation:ofBreathe 8s ease-in-out infinite}
-/* the light the orb throws on the palm; it leans toward the pointer */
-.of-light{left:50%;top:var(--oy);width:120%;height:70%;z-index:3;mix-blend-mode:screen;
-  transform:translate(calc(-50% + var(--px)*26px),-6%);
-  background:radial-gradient(38% 22% at 50% 48%,rgba(152,213,238,calc(.20 + var(--charge)*.18)),transparent 70%),radial-gradient(18% 30% at 50% 12%,rgba(79,179,218,.25),transparent 75%);
-  animation:ofBreathe 6s ease-in-out infinite}
-.of-orb{left:50%;top:var(--oy);width:calc(var(--w)*.36);aspect-ratio:1;z-index:4;padding:0;border-radius:50%;
-  translate:calc(-50% + var(--px)*14px) calc(-50% + var(--py)*10px);animation:ofFloat 6s ease-in-out infinite}
-.of-orb::before{content:"";position:absolute;inset:8%;border-radius:50%;z-index:-1;
-  background:radial-gradient(circle,rgba(79,179,218,calc(.5 + var(--charge)*.4)),rgba(23,134,180,.18) 45%,transparent 70%);
-  transform:scale(calc(1.25 + var(--charge)*.35));transition:transform .6s,background .6s}
-.of-orb canvas{width:100%;height:100%;display:block}
-.of-orb i{position:absolute;inset:17%;border-radius:50%;border:1px solid rgba(152,213,238,.32);opacity:0;animation:ofRipple 5.6s cubic-bezier(.2,.6,.3,1) infinite}
-.of-orb i+i{animation-delay:2.8s}
+.of-hand{inset:auto 0 0;width:100%;height:auto;z-index:2;will-change:transform;
+  -webkit-mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 84%,transparent 99%);mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 84%,transparent 99%);
+  animation:ofHand 11s cubic-bezier(.45,0,.55,1) infinite}
+/* pool of light the hand rises from */
+.of-pool{left:-55%;right:-55%;bottom:4%;height:18%;z-index:1;
+  background:radial-gradient(50% 30% at 50% 50%,rgba(225,242,250,.55),rgba(79,179,218,.32) 30%,rgba(23,134,180,.12) 60%,transparent 75%);
+  will-change:opacity;animation:ofPulse 7s cubic-bezier(.45,0,.55,1) infinite}
+.of-pool::after{content:"";position:absolute;left:18%;right:18%;top:50%;height:1.5px;background:linear-gradient(90deg,transparent,rgba(225,242,250,.9),transparent)}
+/* soft column of light between the orb and the palm */
+.of-beam{left:50%;top:var(--oy);width:46%;height:52%;z-index:1;translate:-50% 0;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(79,179,218,.28),rgba(23,134,180,.08) 55%,transparent 75%);
+  will-change:opacity;animation:ofPulse 7s cubic-bezier(.45,0,.55,1) infinite -3.5s}
+/* the shaft of light rising above the orb */
+.of-shaft{left:50%;top:calc(var(--oy) - 46%);width:22%;height:46%;z-index:3;translate:-50% 0;
+  background:linear-gradient(0deg,rgba(152,213,238,.5),rgba(79,179,218,.12) 45%,transparent);border-radius:50%;
+  -webkit-mask-image:radial-gradient(50% 100% at 50% 100%,#000 30%,transparent);mask-image:radial-gradient(50% 100% at 50% 100%,#000 30%,transparent);
+  will-change:opacity;animation:ofPulse 6s cubic-bezier(.45,0,.55,1) infinite -1s}
+.of-orb{left:50%;top:var(--oy);width:calc(var(--w)*var(--orb));aspect-ratio:1;z-index:4;padding:0;border-radius:50%;will-change:transform;
+  translate:calc(-50% + var(--px)*14px) calc(-50% + var(--py)*10px);animation:ofFloat 8s cubic-bezier(.45,0,.55,1) infinite}
+.of-orb::before{content:"";position:absolute;inset:6%;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(79,179,218,calc(.5 + var(--charge)*.4)),rgba(23,134,180,.2) 45%,transparent 70%);
+  transform:scale(calc(1.3 + var(--charge)*.35));transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.of-orb canvas{position:relative;z-index:1;width:100%;height:100%;display:block}
+.of-orb i{position:absolute;inset:16%;border-radius:50%;border:1px solid rgba(152,213,238,.3);opacity:0;will-change:transform,opacity;animation:ofRipple 7s cubic-bezier(.2,.6,.3,1) infinite}
+.of-orb i+i{animation-delay:3.5s}
+/* tilted orbit: the back half sits behind the planet, the front half in front */
+.of-ring{position:absolute;left:50%;top:50%;width:250%;height:72%;border-radius:50%;border:1.2px solid rgba(152,213,238,.55);z-index:0;
+  transform:translate(-50%,-50%) rotate(-24deg);box-shadow:0 0 18px rgba(79,179,218,.25),inset 0 0 18px rgba(79,179,218,.15);
+  -webkit-mask-image:linear-gradient(180deg,#000 50%,transparent 50%);mask-image:linear-gradient(180deg,#000 50%,transparent 50%)}
+.of-ring.front{z-index:2;-webkit-mask-image:linear-gradient(0deg,#000 50%,transparent 50%);mask-image:linear-gradient(0deg,#000 50%,transparent 50%)}
 .of-tag{left:calc(50% + var(--dx));top:calc(var(--oy) + var(--dy));z-index:5;translate:-50% -50%;text-align:center;white-space:nowrap;
-  font-size:13px;color:var(--text);line-height:1.35;animation:ofTag 1s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,6) * 110ms)}
+  font-size:13px;color:var(--text);line-height:1.35;animation:ofTag 1.2s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,6) * 110ms)}
 .of-tag small{display:block;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
-.of-tag::before{content:"";position:absolute;left:50%;top:-12px;width:3px;height:3px;border-radius:50%;background:#e1f2fa;box-shadow:0 0 8px 2px rgba(79,179,218,.8);animation:ofGlint 3.2s ease-in-out infinite;animation-delay:calc(var(--d,6) * 400ms)}
-button.of-tag{pointer-events:auto;padding:6px 10px;border-radius:12px;transition:background .25s}
-button.of-tag:hover,button.of-tag:focus-visible{background:rgba(79,179,218,.1)}
+.of-tag::before{content:"";position:absolute;left:50%;top:-12px;width:3px;height:3px;border-radius:50%;background:#e1f2fa;box-shadow:0 0 8px 2px rgba(79,179,218,.8);animation:ofGlint 3.6s ease-in-out infinite;animation-delay:calc(var(--d,6) * 400ms)}
+button.of-tag{pointer-events:auto;padding:7px 12px;border-radius:12px;background:rgba(2,14,22,.55);border:1px solid rgba(79,179,218,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .3s,border-color .3s}
+button.of-tag:hover,button.of-tag:focus-visible{background:rgba(10,60,85,.55);border-color:rgba(79,179,218,.45)}
 button.of-orb{pointer-events:auto;cursor:pointer}
 button.of-orb:focus-visible{outline:1px solid rgba(152,213,238,.7);outline-offset:4px}
-.of-ask span{display:inline-block;transition:opacity .38s,transform .38s}
+.of-ask span{display:inline-block;transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1)}
 .of-ask span.out{opacity:0;transform:translateY(6px)}
-@keyframes ofFloat{50%{transform:translateY(-9px)}}
-@keyframes ofHand{50%{transform:translateY(-4px)}}
-@keyframes ofBreathe{50%{opacity:.72}}
-@keyframes ofRipple{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(2.3)}}
-@keyframes ofTag{from{opacity:0;filter:blur(6px)}}
+/* entrance: the hand rises from the floor, the planet arrives, the orbit settles — then the idle loops take over */
+.page.on .offering .of-hand{animation:ofRise 2s cubic-bezier(.16,1,.3,1) both,ofHand 11s cubic-bezier(.45,0,.55,1) 2s infinite}
+.page.on .offering .of-orb{animation:ofOrbIn 1.8s cubic-bezier(.16,1,.3,1) .5s both,ofFloat 8s cubic-bezier(.45,0,.55,1) 2.3s infinite}
+.page.on .offering .of-ring{animation:ofRingIn 2.2s cubic-bezier(.16,1,.3,1) .9s both}
+.page.on .offering .of-pool{animation:ofFade 1.6s ease-out both,ofPulse 7s cubic-bezier(.45,0,.55,1) 1.6s infinite}
+.page.on .offering .of-beam,.page.on .offering .of-shaft{animation:ofFade 2s ease-out 1.2s both,ofPulse 7s cubic-bezier(.45,0,.55,1) 3.2s infinite}
+@keyframes ofRise{from{opacity:0;translate:0 70px}}
+@keyframes ofOrbIn{from{opacity:0;scale:.82}}
+@keyframes ofRingIn{from{opacity:0;scale:.6}}
+@keyframes ofFade{from{opacity:0}}
+@keyframes ofFloat{50%{transform:translate3d(0,-10px,0)}}
+@keyframes ofHand{50%{transform:translate3d(0,-5px,0)}}
+@keyframes ofPulse{50%{opacity:.7}}
+@keyframes ofRipple{0%{opacity:.6;transform:scale(1)}100%{opacity:0;transform:scale(2.2)}}
+@keyframes ofTag{from{opacity:0;transform:translate3d(0,8px,0)}}
 @keyframes ofGlint{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
 
-/* sign-in: the hand rises between the title and the form */
-.of-auth{grid-area:1/2;align-self:center;justify-self:center;--w:340px;z-index:0;margin-bottom:-40px}
+/* sign-in hero, after the reference: title │ the offering │ form */
+.badge-pill{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 12px;border-radius:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#cfe6f1;
+  background:rgba(4,32,46,.55);border:1px solid rgba(79,179,218,.35);box-shadow:inset 0 0 12px rgba(79,179,218,.08)}
+.badge-pill i{width:6px;height:6px;border-radius:50%;background:#4fb3da;box-shadow:0 0 10px #4fb3da;animation:ofGlint 2.8s ease-in-out infinite}
+.auth-copy .lede{font-size:19px;color:#a9c6d6;margin-top:-4px}
+.auth-cta{display:flex;gap:16px;margin-top:30px}
+.auth-cta .btn{height:52px;padding:0 28px;font-size:15px;background:linear-gradient(180deg,#4fb3da,#1786b4);border-color:transparent;box-shadow:0 10px 34px -8px rgba(79,179,218,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+.auth-cta .btn:hover{transform:translateY(-1px);box-shadow:0 14px 40px -8px rgba(79,179,218,.85),inset 0 1px 0 rgba(255,255,255,.35)}
+.auth-stats{display:flex;margin-top:40px}
+.auth-stats>div{white-space:nowrap;display:grid;grid-template-columns:auto auto;column-gap:10px;align-items:center;padding:0 26px;border-left:1px solid rgba(79,179,218,.2)}
+.auth-stats>div:first-child{padding-left:0;border-left:0}
+.auth-stats span{color:#98d5ee;grid-row:span 2}
+.auth-stats b{font-weight:400;font-size:20px;line-height:1.1}
+.auth-stats small{font-size:12px;color:var(--muted);grid-column:2}
+.auth-card{padding:34px 32px 28px;background:linear-gradient(180deg,rgba(4,30,44,.78),rgba(2,16,25,.86));border-color:rgba(79,179,218,.3);box-shadow:0 30px 80px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(152,213,238,.12)}
+.ifld{position:relative;display:block}
+.ifld>.ic{position:absolute;left:16px;top:50%;translate:0 -50%;color:#98d5ee;opacity:.85;pointer-events:none}
+.auth-card .ifld input{height:52px;padding:0 46px 0 48px;border-radius:14px;font-size:14.5px}
+.ifld .eye{position:absolute;right:12px;top:50%;translate:0 -50%;width:30px;height:30px;display:grid;place-items:center;color:var(--muted);border-radius:8px}
+.ifld .eye:hover,.ifld .eye.on{color:#e1f2fa}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.of-auth{grid-area:1/2;align-self:end;justify-self:center;--w:380px;--oy:27%;--orb:.56;z-index:0;margin-bottom:-2px}
+.of-auth .of-hand{-webkit-mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%);mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%)}
 /* Home: the hand sits right of the search; below 1280px the stacked words return */
-.of-home{display:none;position:absolute;right:-12px;top:-46px;--w:330px;--oy:30%}
-.offering::after{content:"";position:absolute;inset:-12% -38% -4%;z-index:0;background:radial-gradient(closest-side at 50% 42%,rgba(2,14,22,.86),rgba(3,22,33,.6) 55%,rgba(2,12,19,0))}
-.of-home .of-tag{font-size:12.5px}
+.of-home{display:none;position:absolute;right:-6px;top:-40px;--w:330px;--oy:27%;--orb:.48}
+.of-home .of-tag{font-size:12.5px;text-shadow:0 1px 12px #020c13,0 0 4px #020c13}
+.of-home .of-hand{-webkit-mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%);mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%)}
+.of-home .of-ring{width:210%;border-color:rgba(152,213,238,.4)}
 @media (min-width:1280px){#p-home .hero .side{display:none}.of-home{display:block}}
 @media (max-width:1100px){.auth{grid-template-columns:minmax(0,1fr) minmax(0,400px)}.auth-card{grid-area:1/2}.of-auth{display:none}}
-@media (max-width:900px){.auth{grid-template-columns:1fr}.auth-copy,.auth-card,.of-auth{grid-area:auto}.of-auth{display:block;margin:-10px auto -150px;--w:300px;order:-1}.of-auth .of-tag{display:none}}
+@media (max-width:900px){.auth{grid-template-columns:1fr}.auth-copy,.auth-card,.of-auth{grid-area:auto}.of-auth{display:block;margin:-10px auto -110px;--w:300px;order:-1}.auth-stats>div{padding:0 14px}}
 @media (prefers-reduced-motion:reduce){.offering *{animation:none!important}}
 
 

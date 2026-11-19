@@ -193,14 +193,16 @@ const friendly=e=>{const m=e?.message||String(e);
   return/invalid login credentials/i.test(m)?'That email and password don’t match.':/email not confirmed/i.test(m)?'Confirm your email first. Check your inbox for the link.'
     :/rate limit|too many/i.test(m)?'Too many attempts. Wait a minute and try again.':/already registered/i.test(m)?'An account with that email already exists. Try signing in.':m};
 const AUTH={
-  signin:{h:'Welcome back',p:'Sign in to pick up where you left off.',btn:'Sign in',f:['email','password'],extra:'<button type="button" class="link" data-amode="reset">Forgot password?</button>',foot:'New to Lunorb? <button type="button" class="link" data-amode="signup">Create an account</button>'},
+  signin:{h:'Welcome back',p:'Sign in to continue your journey.',btn:'Sign in',f:['email','password'],extra:'<button type="button" class="link" data-amode="reset">Forgot password?</button>',foot:'New to Lunorb? <button type="button" class="link" data-amode="signup">Create an account</button>'},
   signup:{h:'Create your account',p:'Free to start. No card needed.',btn:'Create account',f:['name','email','newpw'],foot:'Already have an account? <button type="button" class="link" data-amode="signin">Sign in</button>'},
   reset:{h:'Reset your password',p:'We’ll email you a link to choose a new one.',btn:'Send reset link',f:['email'],foot:'<button type="button" class="link" data-amode="signin">Back to sign in</button>'},
   update:{h:'Choose a new password',p:'Use at least 8 characters.',btn:'Save password',f:['newpw']}};
-const FIELD={name:'<label class="fld"><span>Your name</span><input name="name" autocomplete="name" maxlength="60" required></label>',
-  email:'<label class="fld"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>',
-  password:'<label class="fld"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>',
-  newpw:'<label class="fld"><span>Password <em>at least 8 characters</em></span><input type="password" name="password" autocomplete="new-password" minlength="8" required></label>'};
+// icon fields: the label text stays for screen readers; the eye toggles password visibility (handled below)
+const IN=(icon,label,input,eye)=>`<label class="fld ifld"><span class="sr">${label}</span>${ic(icon,17)}${input}${eye?`<button type="button" class="eye" data-eye aria-label="Show password">${ic('eye',17)}</button>`:''}</label>`;
+const FIELD={name:IN('user','Your name','<input name="name" autocomplete="name" maxlength="60" placeholder="Your name" required>'),
+  email:IN('mail','Email','<input type="email" name="email" autocomplete="email" placeholder="Enter your email address" required>'),
+  password:IN('lock','Password','<input type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required>',1),
+  newpw:IN('lock','Password (at least 8 characters)','<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="Choose a password (8+ characters)" required>',1)};
 function renderAuth(){
   const c=$('#authCard');
   if(!BACKEND){c.innerHTML=`<div class="eyebrow">Accounts</div><h2>Almost ready</h2><p class="muted-sm">Sign-in switches on once the Supabase project URL is added to <code>js/config.js</code>. Until then Lunorb runs in local mode and saves to this browser.</p><button class="btn solid auth-go" data-go="home">Continue in local mode ${ic('arrow',15)}</button>`;return}
@@ -213,6 +215,7 @@ function renderAuth(){
   setTimeout(()=>c.querySelector('input')?.focus({preventScroll:true}),50); // keep the hero in view; the form is one scroll away on phones
 }
 $('#authCard').addEventListener('click',async e=>{
+  const eye=e.target.closest('[data-eye]');if(eye){const i=eye.parentElement.querySelector('input'),show=i.type==='password';i.type=show?'text':'password';eye.setAttribute('aria-label',show?'Hide password':'Show password');eye.classList.toggle('on',show);return}
   const m=e.target.closest('[data-amode]');if(m){authMode=m.dataset.amode;authNotice='';renderAuth();return}
   if(e.target.closest('#authRetry'))location.reload();
   if(e.target.closest('#authOut')){await sb.auth.signOut({scope:'local'});location.replace(location.pathname)}

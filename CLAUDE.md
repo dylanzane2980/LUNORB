@@ -16,9 +16,24 @@ Lunorb is an AI-workspace product: a directory of 750 tools, guided "everyday" p
 - Data and category colours are deliberately unchanged.
 - The aurora rendering algorithm is still untouched; only its colours changed, at the user's request.
 
+**Signed-out hero (2026-11-19, matched to the user's own generated mock):**
+- Layout:
+  - left: pill badge, a 3-line title, "Plan. Execute. Achieve.", a Get Started button (switches the card to sign-up) and a stats row of real numbers only
+  - middle: the hand and orb
+  - right: the form, with icon inputs and a working password eye
+- Deliberately not copied from the mock: invented stats ("10x", "50K+ users"), Watch Demo, OAuth buttons (not configured in Supabase) and Remember me.
+- `body.gate .scene` is 1040px tall, which drops the floor horizon to about 730px so the hand rises out of it.
+
+**Void scene:**
+- `SCN.home` and `SCN.auth` have `void:true`. `voidSVG()` in app.js then draws cloud banks, a glossy floor, a horizon line and rings centred on `floorX`, instead of the mountains.
+- Other pages keep the mountains.
+- Home's brightest aurora ribbon was moved right, behind the hand, so the headline stays readable.
+
 **The Offering** (`js/offering.js`, `.offering` in app.css):
 - An open hand holds the live Ask Lunorb orb. It appears in the sign-in hero, as the middle column of the copy │ offering │ form grid, and on Home at ≥1280px, where it replaces `.side`.
-- The hand is an original image generated with Figma AI (file "Lunorb — brand assets"). Its dark backdrop was converted to alpha, giving `img/hero-hand*.webp`.
+- The hand is an original image generated with Figma AI (file "Lunorb — brand assets"): a vertical, rim-lit dark hand. It was cut out to alpha with a flood-fill silhouette, giving `img/hero-hand*.webp`.
+- Layers: `.of-pool`, `.of-beam`, `.of-hand`, `.of-shaft` and `.of-orb`. The orb holds `.of-ring` back and front halves (a tilted orbit) around `canvas.globe.calm`.
+- Motion is transform and opacity only. The entrance (`ofRise`/`ofOrbIn`/`ofRingIn`) hands off to the idle loops; it uses the individual `translate`/`scale` properties so the two never conflict.
 - Don't use `mix-blend-mode` for it: `main` has `z-index` and isolates blending.
 - The orb is `canvas.globe.calm`, a dark-glass variant in globe.js with no orbit ring.
 - Behaviour:

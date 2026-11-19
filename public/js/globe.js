@@ -19,20 +19,20 @@ function drawGlobe(cv,t){
     g.strokeStyle=lg;g.globalAlpha=back?.35:.95;g.lineWidth=Math.max(1,S*.028);g.stroke();
     const a=(t*.0011)%(Math.PI*2),onBack=a>Math.PI;if(onBack===back){g.globalAlpha=back?.4:1;g.fillStyle='#e1f2fa';g.shadowColor='#4fb3da';g.shadowBlur=S*.12;g.beginPath();g.arc(Math.cos(a)*R*1.42,Math.sin(a)*R*.36,S*.035,0,7);g.fill()}
     g.restore()};
-  const halo=g.createRadialGradient(c,c,R*.9,c,c,R*1.6);halo.addColorStop(0,'rgba(79,179,218,.5)');halo.addColorStop(1,'rgba(79,179,218,0)');g.fillStyle=halo;g.fillRect(0,0,S,S);
+  const halo=g.createRadialGradient(c,c,R*.9,c,c,R*(calm?1.38:1.6)); // calm: stay inside the canvas so no square edgehalo.addColorStop(0,'rgba(79,179,218,.5)');halo.addColorStop(1,'rgba(79,179,218,0)');g.fillStyle=halo;g.fillRect(0,0,S,S);
   if(!calm)ring(true);
   const body=g.createRadialGradient(c-R*.38,c-R*.42,R*.05,c,c,R);
-  if(calm){body.addColorStop(0,'#3f9fc6');body.addColorStop(.28,'#0f5e83');body.addColorStop(.65,'#04202e');body.addColorStop(1,'#020c13')}
+  if(calm){body.addColorStop(0,'#2f86ad');body.addColorStop(.3,'#0a3c55');body.addColorStop(.7,'#03141f');body.addColorStop(1,'#01080d')}
   else{body.addColorStop(0,'#e1f2fa');body.addColorStop(.3,'#4fb3da');body.addColorStop(.68,'#0f5e83');body.addColorStop(1,'#04202e')}
   g.fillStyle=body;g.beginPath();g.arc(c,c,R,0,7);g.fill();
   g.save();g.beginPath();g.arc(c,c,R,0,7);g.clip();
   // graticule: meridians and parallels, front half only, fading toward the limb
   g.lineWidth=Math.max(.6,S*.008);
-  const line=f=>{let prev=null;for(let k=0;k<=36;k++){const p=proj(...f(k/36));if(prev&&p[2]>0&&prev[2]>0){g.strokeStyle=`rgba(200,236,250,${.12+.3*p[2]})`;g.beginPath();g.moveTo(prev[0],prev[1]);g.lineTo(p[0],p[1]);g.stroke()}prev=p}};
+  const line=f=>{let prev=null;for(let k=0;k<=36;k++){const p=proj(...f(k/36));if(prev&&p[2]>0&&prev[2]>0){g.strokeStyle=`rgba(200,236,250,${(.12+.3*p[2])*(calm?.14:1)})`;g.beginPath();g.moveTo(prev[0],prev[1]);g.lineTo(p[0],p[1]);g.stroke()}prev=p}};
   for(let m=0;m<6;m++){const lon=m*Math.PI/6;line(u=>{const lat=(u-.5)*Math.PI;return[Math.cos(lat)*Math.cos(lon),Math.sin(lat),Math.cos(lat)*Math.sin(lon)]})}
   for(const lat of[-1,-.5,0,.5,1].map(v=>v*Math.PI/3.2))line(u=>{const lon=u*Math.PI*2;return[Math.cos(lat)*Math.cos(lon),Math.sin(lat),Math.cos(lat)*Math.sin(lon)]});
   GLOBE.pts.forEach((p,i)=>{const q=proj(...p);if(q[2]<=0)return;const L=GLOBE.isLand[i];
-    g.fillStyle=L?`rgba(225,242,250,${(.35+.65*q[2])*(calm?.45:1)})`:`rgba(152,213,238,${.08+.18*q[2]})`;g.beginPath();g.arc(q[0],q[1],(L?.9:.55)*dpr*(.55+.45*q[2])*(S/(44*dpr)),0,7);g.fill()});
+    g.fillStyle=L?`rgba(225,242,250,${(.35+.65*q[2])*(calm?.16:1)})`:`rgba(152,213,238,${(.08+.18*q[2])*(calm?.5:1)})`;g.beginPath();g.arc(q[0],q[1],(L?.9:.55)*dpr*(.55+.45*q[2])*(S/(44*dpr)),0,7);g.fill()});
   // night side and a soft specular highlight sell the curvature
   const shade=g.createRadialGradient(c-R*.5,c-R*.55,R*.2,c,c,R*1.05);shade.addColorStop(0,'rgba(0,0,0,0)');shade.addColorStop(.7,'rgba(2,14,21,.15)');shade.addColorStop(1,'rgba(2,14,21,.7)');
   g.fillStyle=shade;g.fillRect(0,0,S,S);

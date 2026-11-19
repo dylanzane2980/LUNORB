@@ -33,11 +33,10 @@ nav .wrap{display:flex;align-items:center;height:72px;gap:40px}
 /* horizontal lockup: mark │ wordmark */
 .logo .mk{flex:none;height:2.1em;width:auto;margin:-.3em 0 0 -.3em}
 .logo .sep{flex:none;width:1px;height:1.3em;margin:0 .8em 0 .45em;background:linear-gradient(180deg,transparent,rgba(160,190,255,.45),transparent)}
-.links{display:flex;gap:30px;font-size:14px;color:var(--muted)}
-.links a{color:inherit;text-decoration:none;position:relative;padding:6px 0;transition:color .2s}
+.links{display:flex;gap:6px;font-size:14px;color:var(--muted);margin-left:auto}
+.links a{color:inherit;text-decoration:none;position:relative;padding:8px 15px;border-radius:30px;border:1px solid transparent;transition:color .3s,background .3s,border-color .3s}
 .links a:hover{color:var(--text)}
-.links a.on{color:var(--text)}
-.links a.on::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;background:var(--blue);box-shadow:0 0 10px var(--blue)}
+.links a.on{color:var(--text);background:rgba(10,60,85,.4);border-color:rgba(79,179,218,.45);box-shadow:inset 0 0 14px rgba(79,179,218,.12),0 0 18px -6px rgba(79,179,218,.5)}
 .nav-r{margin-left:auto;display:flex;align-items:center;gap:22px;color:#c6dde8}
 .nav-r button{display:grid;place-items:center;position:relative}
 .nav-r button:hover{color:#fff}

@@ -398,15 +398,16 @@ function strip(stops){const c=document.createElement('canvas');c.width=1;c.heigh
 const GREEN=strip([[0,'rgba(15,94,131,0)'],[.3,'rgba(23,134,180,.24)'],[.62,'rgba(79,179,218,.4)'],[.9,'rgba(152,213,238,.85)'],[.95,'rgba(225,242,250,.5)'],[1,'rgba(225,242,250,0)']]); // Sky palette
 const CYAN=strip([[0,'rgba(10,60,85,0)'],[.35,'rgba(15,94,131,.22)'],[.7,'rgba(79,179,218,.35)'],[.92,'rgba(225,242,250,.85)'],[1,'rgba(225,242,250,0)']]);
 const VIOLET=strip([[0,'rgba(10,60,85,0)'],[.4,'rgba(15,94,131,.3)'],[.85,'rgba(23,134,180,.6)'],[1,'rgba(23,134,180,0)']]);
+const DEEP=strip([[0,'rgba(10,60,85,0)'],[.3,'rgba(15,94,131,.28)'],[.65,'rgba(23,134,180,.5)'],[.9,'rgba(79,179,218,.78)'],[.96,'rgba(79,179,218,.45)'],[1,'rgba(79,179,218,0)']]); // sign-in: deep blue, no white fringe
 const SCN={
  home:{seed:11,trees:.6,figure:false,void:true,floorX:1290,r:[
   {u0:.5,u1:1.12,y0:0.6,y1:0.5,amp:.07,f:2.2,h:0.84,a:1,ph:0,sp:1,s:GREEN}, // brightest curtain sits behind the hand, not the headline
   {u0:.3,u1:1.1,y0:0.5,y1:0.41,amp:.05,f:1.6,h:0.61,a:.6,ph:2,sp:.7,s:VIOLET},
   {u0:.02,u1:.5,y0:0.5,y1:0.46,amp:.05,f:1.4,h:0.5,a:.32,ph:4,sp:.8,s:CYAN}]},
- auth:{seed:17,void:true,floorX:800,r:[
-  {u0:.1,u1:.75,y0:0.65,y1:0.46,amp:.07,f:2.2,h:0.84,a:1,ph:0,sp:1,s:GREEN},
-  {u0:.55,u1:1.1,y0:0.54,y1:0.41,amp:.05,f:1.6,h:0.61,a:.7,ph:2,sp:.7,s:VIOLET},
-  {u0:-.05,u1:.45,y0:0.68,y1:0.62,amp:.05,f:1.4,h:0.54,a:.55,ph:4,sp:.8,s:CYAN}]},
+ auth:{seed:17,void:true,floorX:800,rimLight:.25,r:[
+  {u0:-.06,u1:.44,y0:0.5,y1:0.36,amp:.06,f:2.2,h:0.78,a:1,ph:0,sp:1,s:DEEP},
+  {u0:.58,u1:1.08,y0:0.34,y1:0.5,amp:.06,f:2,h:0.78,a:1,ph:3,sp:.9,s:DEEP},
+  {u0:.28,u1:.74,y0:0.34,y1:0.34,amp:.04,f:1.4,h:0.62,a:.5,ph:4,sp:.8,s:VIOLET}]},
  builder:{seed:23,trees:.3,figure:false,planet:true,r:[
   {u0:.4,u1:1.1,y0:0.52,y1:0.68,amp:.08,f:2,h:0.81,a:.9,ph:1,sp:1,s:GREEN},
   {u0:.55,u1:1.05,y0:0.44,y1:0.53,amp:.05,f:1.5,h:0.68,a:.8,ph:3,sp:.6,s:VIOLET}]},
@@ -461,7 +462,7 @@ function voidSVG(c){
     <linearGradient id="${id}hl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(152,213,238,0)"/><stop offset=".5" stop-color="rgba(152,213,238,.16)"/><stop offset="1" stop-color="rgba(152,213,238,0)"/></linearGradient>
     <clipPath id="${id}below"><rect x="-200" y="${HZ}" width="2000" height="${800-HZ}"/></clipPath></defs>
   <rect x="-200" y="260" width="2000" height="${HZ-260}" fill="url(#${id}hz)"/>
-  ${L.map((l,k)=>`<path d="${l.fill}" fill="url(#${id}c${k})"/><path d="${l.rim}" fill="none" stroke="url(#${id}r${k})" stroke-opacity=".35" stroke-width="7"/><path d="${l.rim}" fill="none" stroke="url(#${id}r${k})" stroke-width="1.5"/>`).join('')}
+  ${L.map((l,k)=>`<path d="${l.fill}" fill="url(#${id}c${k})"/><path d="${l.rim}" fill="none" stroke="url(#${id}r${k})" stroke-opacity="${.35*(c.rimLight??1)}" stroke-width="7"/><path d="${l.rim}" fill="none" stroke="url(#${id}r${k})" stroke-opacity="${c.rimLight??1}" stroke-width="1.5"/>`).join('')}
   <rect x="-200" y="${HZ}" width="2000" height="${800-HZ}" fill="url(#${id}fl)"/>
   <ellipse cx="${fx}" cy="${HZ+10}" rx="420" ry="60" fill="url(#${id}gl)"/>
   <g clip-path="url(#${id}below)">${rings}</g>

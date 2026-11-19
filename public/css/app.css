@@ -56,13 +56,15 @@ body.booting .boot-loader .boot-mk{width:132px;height:auto;animation:mkPulse 2.4
 body.gate nav .links,body.gate nav .nav-r,body.gate .helper-btn,body.gate .tabbar{display:none}
 
 /* auth page */
-/* desktop: title │ the offering │ form — the hand has its own column so nothing overlaps at any height */
-.auth{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 220px minmax(0,370px);gap:32px;align-items:center;min-height:700px;padding:24px 0}
-/* signed out: a taller scene drops the floor horizon to ~730px so the hand rises out of it */
-body.gate .scene{height:1040px}
-.auth-copy{grid-area:1/1;position:relative;z-index:1;text-shadow:0 2px 24px rgba(2,12,19,.9)}
-.auth-card{grid-area:1/3;position:relative;z-index:1}
-.auth-copy h1{font-weight:300;font-size:clamp(36px,3.6vw,52px);line-height:1.04;letter-spacing:-.02em;margin:14px 0 22px}
+/* signed-out hero, measured against the user's mock at 1440x810:
+   the floor horizon sits at 82vh, the hand rises out of it at the page centre, title left, form right */
+body.gate .wrap{max-width:1330px}
+body.gate .scene{height:117.1vh} /* scene scale = height/800, so its horizon (y 560/800) lands at 82vh */
+#p-auth.page{padding-top:0}
+.auth{position:relative;display:grid;grid-template-columns:minmax(0,500px) minmax(0,1fr) 346px;gap:32px;align-items:end;height:calc(82vh - 72px);min-height:500px;padding:0}
+.auth-copy{grid-area:1/1;position:relative;z-index:1;margin-bottom:34px;text-shadow:0 2px 24px rgba(2,12,19,.9)}
+.auth-card{grid-area:1/3;position:relative;z-index:1;margin:0 14px 36px -14px}
+.auth-copy h1{font-weight:300;font-size:clamp(38px,4.17vw,60px);line-height:.93;letter-spacing:-.02em;margin:14px 0 22px}
 .auth-points{list-style:none;margin-top:28px;display:grid;gap:12px;font-size:15px;color:#c3dbe6}
 .auth-points li{display:flex;align-items:center;gap:12px}
 .auth-points li>span{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;color:#98d5ee;background:rgba(79,179,218,.12);border:1px solid rgba(79,179,218,.25)}
@@ -89,8 +91,8 @@ body.gate .scene{height:1040px}
   -webkit-mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 84%,transparent 99%);mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 84%,transparent 99%);
   animation:ofHand 11s cubic-bezier(.45,0,.55,1) infinite}
 /* pool of light the hand rises from */
-.of-pool{left:-55%;right:-55%;bottom:4%;height:18%;z-index:1;
-  background:radial-gradient(50% 30% at 50% 50%,rgba(225,242,250,.55),rgba(79,179,218,.32) 30%,rgba(23,134,180,.12) 60%,transparent 75%);
+.of-pool{left:-80%;right:-80%;bottom:4%;height:18%;z-index:1;
+  background:radial-gradient(50% 32% at 50% 50%,rgba(225,242,250,.8),rgba(79,179,218,.45) 22%,rgba(23,134,180,.16) 55%,transparent 75%);
   will-change:opacity;animation:ofPulse 7s cubic-bezier(.45,0,.55,1) infinite}
 .of-pool::after{content:"";position:absolute;left:18%;right:18%;top:50%;height:1.5px;background:linear-gradient(90deg,transparent,rgba(225,242,250,.9),transparent)}
 /* soft column of light between the orb and the palm */
@@ -99,7 +101,7 @@ body.gate .scene{height:1040px}
   will-change:opacity;animation:ofPulse 7s cubic-bezier(.45,0,.55,1) infinite -3.5s}
 /* the shaft of light rising above the orb */
 .of-shaft{left:50%;top:calc(var(--oy) - 46%);width:22%;height:46%;z-index:3;translate:-50% 0;
-  background:linear-gradient(0deg,rgba(152,213,238,.5),rgba(79,179,218,.12) 45%,transparent);border-radius:50%;
+  background:linear-gradient(0deg,rgba(225,242,250,.8),rgba(79,179,218,.25) 40%,transparent);border-radius:50%;
   -webkit-mask-image:radial-gradient(50% 100% at 50% 100%,#000 30%,transparent);mask-image:radial-gradient(50% 100% at 50% 100%,#000 30%,transparent);
   will-change:opacity;animation:ofPulse 6s cubic-bezier(.45,0,.55,1) infinite -1s}
 .of-orb{left:50%;top:var(--oy);width:calc(var(--w)*var(--orb));aspect-ratio:1;z-index:4;padding:0;border-radius:50%;will-change:transform;
@@ -143,36 +145,57 @@ button.of-orb:focus-visible{outline:1px solid rgba(152,213,238,.7);outline-offse
 @keyframes ofGlint{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
 
 /* sign-in hero, after the reference: title │ the offering │ form */
-.badge-pill{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 12px;border-radius:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#cfe6f1;
+.badge-pill{display:inline-flex;align-items:center;gap:9px;padding:6px 13px 6px 11px;border-radius:30px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#cfe6f1;
   background:rgba(4,32,46,.55);border:1px solid rgba(79,179,218,.35);box-shadow:inset 0 0 12px rgba(79,179,218,.08)}
 .badge-pill i{width:6px;height:6px;border-radius:50%;background:#4fb3da;box-shadow:0 0 10px #4fb3da;animation:ofGlint 2.8s ease-in-out infinite}
-.auth-copy .lede{font-size:19px;color:#a9c6d6;margin-top:-4px}
-.auth-cta{display:flex;gap:16px;margin-top:30px}
-.auth-cta .btn{height:52px;padding:0 28px;font-size:15px;background:linear-gradient(180deg,#4fb3da,#1786b4);border-color:transparent;box-shadow:0 10px 34px -8px rgba(79,179,218,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+.auth-copy .lede{font-size:18px;color:#aebdcc;margin-top:-2px}
+.auth-cta{display:flex;gap:16px;margin-top:38px}
+.auth-cta .btn{height:47px;padding:0 26px;font-size:14.5px;background:linear-gradient(180deg,#4fb3da,#1786b4);border-color:transparent;box-shadow:0 10px 34px -8px rgba(79,179,218,.7),inset 0 1px 0 rgba(255,255,255,.35)}
 .auth-cta .btn:hover{transform:translateY(-1px);box-shadow:0 14px 40px -8px rgba(79,179,218,.85),inset 0 1px 0 rgba(255,255,255,.35)}
-.auth-stats{display:flex;margin-top:40px}
+.auth-stats{display:flex;margin-top:57px}
 .auth-stats>div{white-space:nowrap;display:grid;grid-template-columns:auto auto;column-gap:10px;align-items:center;padding:0 26px;border-left:1px solid rgba(79,179,218,.2)}
 .auth-stats>div:first-child{padding-left:0;border-left:0}
 .auth-stats span{color:#98d5ee;grid-row:span 2}
-.auth-stats b{font-weight:400;font-size:20px;line-height:1.1}
+.auth-stats b{font-weight:400;font-size:19px;line-height:1.1}
 .auth-stats small{font-size:12px;color:var(--muted);grid-column:2}
-.auth-card{padding:34px 32px 28px;background:linear-gradient(180deg,rgba(4,30,44,.78),rgba(2,16,25,.86));border-color:rgba(79,179,218,.3);box-shadow:0 30px 80px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(152,213,238,.12)}
+.auth-card{padding:30px 28px 24px;background:linear-gradient(180deg,rgba(4,30,44,.78),rgba(2,16,25,.86));border-color:rgba(79,179,218,.3);box-shadow:0 30px 80px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(152,213,238,.12)}
 .ifld{position:relative;display:block}
 .ifld>.ic{position:absolute;left:16px;top:50%;translate:0 -50%;color:#98d5ee;opacity:.85;pointer-events:none}
-.auth-card .ifld input{height:52px;padding:0 46px 0 48px;border-radius:14px;font-size:14.5px}
+.auth-card .ifld input{height:42px;padding:0 44px 0 46px;border-radius:12px;font-size:13.5px}
+.auth-card h2{font-size:26px}
+.auth-card .auth-go{height:40px;border-radius:20px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;margin:22px -28px 4px;border-bottom:1px solid rgba(79,179,218,.16)}
+.auth-tabs button{padding:0 0 12px;font-size:13.5px;color:var(--muted);position:relative;transition:color .3s}
+.auth-tabs button.on{color:var(--text)}
+.auth-tabs button.on::after{content:"";position:absolute;left:22%;right:22%;bottom:-1px;height:2px;border-radius:2px;background:#4fb3da;box-shadow:0 0 10px #4fb3da}
 .ifld .eye{position:absolute;right:12px;top:50%;translate:0 -50%;width:30px;height:30px;display:grid;place-items:center;color:var(--muted);border-radius:8px}
 .ifld .eye:hover,.ifld .eye.on{color:#e1f2fa}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.of-auth{grid-area:1/2;align-self:end;justify-self:center;--w:380px;--oy:27%;--orb:.56;z-index:0;margin-bottom:-2px}
-.of-auth .of-hand{-webkit-mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%);mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%)}
+.of-auth{position:absolute;left:50%;bottom:calc(var(--w) * -.195);margin-left:calc(var(--w) / -2);--w:380px;--oy:25.6%;--orb:.58;z-index:0}
+.of-auth .of-hand{inset:27.5% auto auto 19%;width:62%;-webkit-mask-image:linear-gradient(180deg,#000 88%,transparent 96%);mask-image:linear-gradient(180deg,#000 88%,transparent 96%)}
+.of-auth .of-ring{width:178%;height:46%;border-width:1.4px;border-color:rgba(152,213,238,.7);transform:translate(-50%,-50%) rotate(-22deg)}
+/* the luminous floor the hand rises from (sits exactly on the scene horizon) */
+.of-auth::after{content:"";position:absolute;left:50%;bottom:calc(13% - 70px);width:1500px;height:140px;margin-left:-750px;z-index:1;pointer-events:none;
+  background:radial-gradient(28% 14% at 50% 50%,rgba(225,242,250,.85),rgba(79,179,218,.4) 40%,transparent 100%),radial-gradient(50% 50% at 50% 50%,rgba(23,134,180,.32),rgba(15,94,131,.12) 50%,transparent 75%)}
+.of-auth .of-shaft{top:calc(var(--oy) - 46%);height:34%;width:30%;z-index:5;-webkit-mask-image:none;mask-image:none;border-radius:0;
+  background:radial-gradient(50% 100% at 50% 100%,rgba(225,242,250,.75),rgba(79,179,218,.35) 35%,rgba(23,134,180,.1) 65%,transparent 80%)}
+.of-auth .of-hand{filter:brightness(.56) contrast(1.2) saturate(1.15)}
+.of-auth .of-orb i{display:none}
+/* the planet floods the centre with blue light, like the mock */
+.of-auth::before{content:"";position:absolute;left:50%;top:var(--oy);width:1000px;height:820px;margin:-380px 0 0 -500px;z-index:0;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(23,134,180,.34),rgba(15,94,131,.16) 45%,transparent)}
+/* thin rays rising from the planet */
+.of-auth .of-shaft{background:repeating-linear-gradient(90deg,transparent 0 7px,rgba(152,213,238,.35) 7px 8px,transparent 8px 13px),linear-gradient(0deg,rgba(152,213,238,.85),rgba(79,179,218,.3) 45%,transparent);
+  -webkit-mask-image:radial-gradient(45% 100% at 50% 100%,#000 25%,transparent 100%);mask-image:radial-gradient(45% 100% at 50% 100%,#000 25%,transparent 100%)}
+.of-auth .of-orb::before{inset:-8%;background:radial-gradient(60% 60% at 50% 40%,rgba(79,179,218,calc(.75 + var(--charge)*.25)),rgba(23,134,180,.35) 45%,transparent 72%)}
 /* Home: the hand sits right of the search; below 1280px the stacked words return */
 .of-home{display:none;position:absolute;right:-6px;top:-40px;--w:330px;--oy:27%;--orb:.48}
 .of-home .of-tag{font-size:12.5px;text-shadow:0 1px 12px #020c13,0 0 4px #020c13}
 .of-home .of-hand{-webkit-mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%);mask-image:linear-gradient(180deg,transparent 2%,#000 30%,#000 80%,transparent 88%)}
 .of-home .of-ring{width:210%;border-color:rgba(152,213,238,.4)}
 @media (min-width:1280px){#p-home .hero .side{display:none}.of-home{display:block}}
-@media (max-width:1100px){.auth{grid-template-columns:minmax(0,1fr) minmax(0,400px)}.auth-card{grid-area:1/2}.of-auth{display:none}}
-@media (max-width:900px){.auth{grid-template-columns:1fr}.auth-copy,.auth-card,.of-auth{grid-area:auto}.of-auth{display:block;margin:-10px auto -110px;--w:300px;order:-1}.auth-stats>div{padding:0 14px}}
+@media (max-width:1100px){.auth{grid-template-columns:minmax(0,1fr) minmax(0,380px);height:auto;align-items:center;padding:24px 0 60px}.auth-card{grid-area:1/2;margin:0}.auth-copy{margin:0}.of-auth{display:none}}
+@media (max-width:900px){body.gate .scene{height:1040px}.auth{grid-template-columns:1fr}.auth-copy,.auth-card,.of-auth{grid-area:auto}.of-auth{display:block;position:relative;left:auto;bottom:auto;margin:-10px auto -110px;--w:300px;order:-1}.auth-stats>div{padding:0 14px}}
 @media (prefers-reduced-motion:reduce){.offering *{animation:none!important}}
 
 

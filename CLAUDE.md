@@ -22,7 +22,13 @@ Lunorb is an AI-workspace product: a directory of 750 tools, guided "everyday" p
   - middle: the hand and orb
   - right: the form, with icon inputs and a working password eye
 - Deliberately not copied from the mock: invented stats ("10x", "50K+ users"), Watch Demo, OAuth buttons (not configured in Supabase) and Remember me.
-- `body.gate .scene` is 1040px tall, which drops the floor horizon to about 730px so the hand rises out of it.
+- Matched to the mock (`~/Downloads/Lunorb_ AI Workspace Beyond Limits.png`, 1672×941) at 1440×810. Key measured targets (px):
+  - floor at y 662 (82vh): `body.gate .scene{height:117.1vh}`, and `.auth` is `82vh - 72px` tall with the stage pool on its bottom edge
+  - planet centre (720, 312), diameter 158
+  - fingertips at y 455
+  - card x 997–1343
+  - title 240–410
+- Card tabs (Sign in / Create account) are real `data-amode` switches.
 
 **Void scene:**
 - `SCN.home` and `SCN.auth` have `void:true`. `voidSVG()` in app.js then draws cloud banks, a glossy floor, a horizon line and rings centred on `floorX`, instead of the mountains.

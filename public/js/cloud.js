@@ -209,7 +209,8 @@ function renderAuth(){
   if(authMode==='check'){c.innerHTML=`<div class="auth-ic">${ic('mail',26)}</div><h2>Check your email</h2><p class="muted-sm">We sent a link to <b>${esc(authEmail)}</b>. Open it to continue. It can take a minute to arrive, so check spam too.</p><p class="auth-foot"><button type="button" class="link" data-amode="signin">Back to sign in</button></p>`;return}
   if(authMode==='error'){c.innerHTML=`<h2>We couldn’t load your account</h2><div class="auth-msg">${esc(authNotice)}</div><div class="auth-row"><button class="btn solid" id="authRetry">Try again</button><button class="btn ghost" id="authOut">Sign out</button></div>`;return}
   const f=AUTH[authMode];
-  c.innerHTML=`<h2>${f.h}</h2><p class="muted-sm">${f.p}</p>${authNotice?`<div class="auth-msg" role="alert">${esc(authNotice)}</div>`:''}
+  const tabs=authMode==='signin'||authMode==='signup'?`<div class="auth-tabs" role="tablist"><button type="button" role="tab" data-amode="signin" class="${authMode==='signin'?'on':''}" aria-selected="${authMode==='signin'}">Sign in</button><button type="button" role="tab" data-amode="signup" class="${authMode==='signup'?'on':''}" aria-selected="${authMode==='signup'}">Create account</button></div>`:'';
+  c.innerHTML=`<h2>${f.h}</h2><p class="muted-sm">${f.p}</p>${tabs}${authNotice?`<div class="auth-msg" role="alert">${esc(authNotice)}</div>`:''}
     <form id="authForm">${f.f.map(k=>FIELD[k]).join('')}${f.extra?`<div class="auth-links">${f.extra}</div>`:''}<button class="btn solid auth-go" type="submit">${f.btn} ${ic('arrow',15)}</button></form>
     ${f.foot?`<p class="auth-foot">${f.foot}</p>`:''}`;
   setTimeout(()=>c.querySelector('input')?.focus({preventScroll:true}),50); // keep the hero in view; the form is one scroll away on phones

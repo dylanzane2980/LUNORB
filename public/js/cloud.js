@@ -21,7 +21,7 @@ function cleanStep(s){
   if(!s||typeof s!=='object')return null;
   const str=(v,n)=>typeof v==='string'?v.slice(0,n):'',tn=str(s.tool,60);
   return{i:P[s.i]?s.i:'sparkle',t:str(s.t,80)||'Step',d:str(s.d,160),tool:/^[\w .+&'()\/-]{1,60}$/.test(tn)?tn:'Custom tool',
-    c:/^(#[0-9a-f]{3,8}|hsl\(\d{1,3} \d{1,3}% \d{1,3}%\))$/i.test(s.c||'')?s.c:'#4c8dff',r:str(s.r,80)||'Step complete',prompt:str(s.prompt,4000),par:s.par===true};
+    c:/^(#[0-9a-f]{3,8}|hsl\(\d{1,3} \d{1,3}% \d{1,3}%\))$/i.test(s.c||'')?s.c:'#4fb3da',r:str(s.r,80)||'Step complete',prompt:str(s.prompt,4000),par:s.par===true};
 }
 const sanitizeSteps=a=>(Array.isArray(a)?a:[]).map(cleanStep).filter(Boolean).slice(0,30);
 
@@ -210,7 +210,7 @@ function renderAuth(){
   c.innerHTML=`<h2>${f.h}</h2><p class="muted-sm">${f.p}</p>${authNotice?`<div class="auth-msg" role="alert">${esc(authNotice)}</div>`:''}
     <form id="authForm">${f.f.map(k=>FIELD[k]).join('')}${f.extra?`<div class="auth-links">${f.extra}</div>`:''}<button class="btn solid auth-go" type="submit">${f.btn} ${ic('arrow',15)}</button></form>
     ${f.foot?`<p class="auth-foot">${f.foot}</p>`:''}`;
-  setTimeout(()=>c.querySelector('input')?.focus(),50);
+  setTimeout(()=>c.querySelector('input')?.focus({preventScroll:true}),50); // keep the hero in view; the form is one scroll away on phones
 }
 $('#authCard').addEventListener('click',async e=>{
   const m=e.target.closest('[data-amode]');if(m){authMode=m.dataset.amode;authNotice='';renderAuth();return}

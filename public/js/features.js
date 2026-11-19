@@ -128,7 +128,7 @@ function openPalette(){
     let i=0,h='';
     if(tl.length)h+='<div class="res-h">Tools</div>'+tl.map(t=>`<div class="res" data-r="${i++}">${monoHTML(t,28)}<div class="res-t">${esc(t.n)}<em>${esc(t.best)}</em></div><small>${t.c}</small></div>`).join('');
     if(cl.length)h+='<div class="res-h">Categories</div>'+cl.map(c=>`<div class="res" data-r="${i++}"><div class="badge sq" style="--c:${c.color};width:28px;height:28px">${ic(c.icon,14)}</div>${esc(c.name)}<small>${c.count} tools</small></div>`).join('');
-    if(pg.length)h+='<div class="res-h">Jump to</div>'+pg.map(p=>`<div class="res" data-r="${i++}"><span style="color:#8fb6ff">${ic(p[2],18)}</span>${p[1]}<small>${ic('arrow',12)}</small></div>`).join('');
+    if(pg.length)h+='<div class="res-h">Jump to</div>'+pg.map(p=>`<div class="res" data-r="${i++}"><span style="color:#98d5ee">${ic(p[2],18)}</span>${p[1]}<small>${ic('arrow',12)}</small></div>`).join('');
     list.innerHTML=h||'<div class="empty">No matches — try “video”, “sql” or “logo”.</div>';sel=0;mark();
   };
   const mark=()=>$$('.res',list).forEach((r,i)=>r.classList.toggle('sel',i===sel));
@@ -235,8 +235,8 @@ $('#stepMenu').addEventListener('click',e=>{if(e.target.closest('[data-lib]')){$
 new MutationObserver(()=>{const m=$('#stepMenu');if(m.classList.contains('on')&&!m.querySelector('[data-lib]'))m.insertAdjacentHTML('beforeend',`<div class="res lib-link" data-lib>${ic('search',16)}Browse all 750 tools<small>${ic('arrow',12)}</small></div>`)}).observe($('#stepMenu'),{attributes:true,attributeFilter:['class']});
 
 /* ---------- projects: kanban + co-pilot ---------- */
-const COLS=[['idea','Ideation','#a78bfa'],['prog','In Progress','#4c8dff'],['rev','Review','#eab308'],['done','Completed','#4ade80']];
-const TAGC={Creative:'#a78bfa',Research:'#22d3ee',Design:'#ec4899',Development:'#4c8dff',Marketing:'#f97316',Video:'#14b8a6',Community:'#eab308',Content:'#4ade80'};
+const COLS=[['idea','Ideation','#a78bfa'],['prog','In Progress','#4fb3da'],['rev','Review','#eab308'],['done','Completed','#4ade80']];
+const TAGC={Creative:'#a78bfa',Research:'#22d3ee',Design:'#ec4899',Development:'#4fb3da',Marketing:'#f97316',Video:'#14b8a6',Community:'#eab308',Content:'#4ade80'};
 const PRI={High:'#fb7185',Medium:'#fbbf24',Low:'#4ade80'};
 if(!S.d.board)S.d.board=[['Brand campaign concept','idea','Creative','High'],['AI art style exploration','idea','Research','Medium'],['Mobile app wireframes','idea','Design','Medium'],['Community challenge','idea','Community','Low'],
   ['Landing page design','prog','Design','High'],['AI video campaign','prog','Video','Medium'],['Tool integration (API)','prog','Development','High'],
@@ -250,13 +250,13 @@ function renderBoard(){
     <div class="col-h"><i style="background:${c};box-shadow:0 0 8px ${c}"></i>${n}<em>${L.length}</em></div>
     <div class="col-b">${L.map(t=>`<div class="task ${k==='done'?'done':''}" draggable="true" data-task="${t.id}">
       <div class="task-t">${k==='done'?`<span class="tick">${ic('check',12)}</span>`:''}<span class="tt" data-edit="${t.id}">${esc(t.t)}</span></div>
-      <div class="task-f"><span class="tag" style="--c:${TAGC[t.tag]||'#8fb6ff'}">${t.tag}</span><button class="tag pri" data-pri="${t.id}" style="--c:${PRI[t.pri]}" title="Change priority">${t.pri}</button>
+      <div class="task-f"><span class="tag" style="--c:${TAGC[t.tag]||'#98d5ee'}">${t.tag}</span><button class="tag pri" data-pri="${t.id}" style="--c:${PRI[t.pri]}" title="Change priority">${t.pri}</button>
       <span class="task-acts">${k!=='done'?`<button data-move="${t.id}" title="Move forward">${ic('arrow',13)}</button>`:''}<button data-deltask="${t.id}" title="Delete">${ic('x',13)}</button></span></div></div>`).join('')}</div>
     <button class="add-task" data-addin="${k}">${ic('plus',13)} Add a task</button></div>`}).join('');
   const open=B.filter(t=>t.col!=='done').length,done=B.filter(t=>t.col==='done').length;
-  $('#projStats').innerHTML=[['folder','#4c8dff',B.length,'Total tasks'],['check','#14b8a6',open,'Open tasks'],['zap','#a855f7',B.filter(t=>t.col==='prog').length,'In progress'],['target','#4ade80',Math.round(done/Math.max(1,B.length)*100),'Complete','%']]
+  $('#projStats').innerHTML=[['folder','#4fb3da',B.length,'Total tasks'],['check','#14b8a6',open,'Open tasks'],['zap','#a855f7',B.filter(t=>t.col==='prog').length,'In progress'],['target','#4ade80',Math.round(done/Math.max(1,B.length)*100),'Complete','%']]
     .map(([i,c,v,l,s],n)=>`<div class="glass glow kpi row" data-a style="--d:${3+n*.5}"><div class="badge sq" style="--c:${c};width:42px;height:42px">${ic(i,19)}</div><div><div class="v sm" data-count="${v}" data-suf="${s||''}">${v}${s||''}</div><div class="l">${l}</div></div></div>`).join('');
-  $('#taskList').innerHTML=`<div class="tl-row th"><span>Task</span><span>Status</span><span>Tag</span><span>Priority</span></div>`+B.map(t=>`<div class="tl-row"><span>${esc(t.t)}</span><span>${COLS.find(c=>c[0]===t.col)[1]}</span><span class="tag" style="--c:${TAGC[t.tag]||'#8fb6ff'}">${t.tag}</span><span class="tag" style="--c:${PRI[t.pri]}">${t.pri}</span></div>`).join('');
+  $('#taskList').innerHTML=`<div class="tl-row th"><span>Task</span><span>Status</span><span>Tag</span><span>Priority</span></div>`+B.map(t=>`<div class="tl-row"><span>${esc(t.t)}</span><span>${COLS.find(c=>c[0]===t.col)[1]}</span><span class="tag" style="--c:${TAGC[t.tag]||'#98d5ee'}">${t.tag}</span><span class="tag" style="--c:${PRI[t.pri]}">${t.pri}</span></div>`).join('');
 }
 const K=$('#kanban');
 K.addEventListener('dragstart',e=>{const t=e.target.closest('[data-task]');if(!t)return;e.dataTransfer.setData('text/plain',t.dataset.task);e.dataTransfer.effectAllowed='move';setTimeout(()=>t.classList.add('dragging'))});
@@ -378,7 +378,7 @@ ENTER.community=()=>{renderCreators();renderPopWf();requestAnimationFrame(()=>qu
 const WEEK_GOALS=['Complete 2 lessons','Try a new AI tool','Build a mini project','Write a reflection','Engage in the community'];
 // consecutive active days ending today (or yesterday, so the streak survives until you're active today)
 function streakDays(){const D=S.d.daily||{},d=new Date();if(!D[dayKey(d)])d.setDate(d.getDate()-1);let n=0;while(D[dayKey(d)]){n++;d.setDate(d.getDate()-1)}return n}
-const TRACKS=[['zap','#eab308','Productivity Pro','Work smarter with AI',13],['image','#ec4899','Creative Builder','Design, content & storytelling',5],['code','#4c8dff','Developer Edge','Build with AI tools',3],['chart','#4ade80','Career Growth','Future-ready skills',19]];
+const TRACKS=[['zap','#eab308','Productivity Pro','Work smarter with AI',13],['image','#ec4899','Creative Builder','Design, content & storytelling',5],['code','#4fb3da','Developer Edge','Build with AI tools',3],['chart','#4ade80','Career Growth','Future-ready skills',19]];
 function renderLearn(){
   const L=S.d.lesson;
   $('#pathCard').innerHTML=`<div class="path-art">${artHTML(200,77,170)}</div><div class="path-b"><div class="card-h" style="margin:0"><h4>AI for Creative Professionals</h4><span class="muted-sm">${L} of 8 modules</span></div>
@@ -407,9 +407,9 @@ TABS.workspace=setWTab;
 $$('[data-wtab]').forEach(b=>b.onclick=()=>setWTab(b.dataset.wtab));
 function renderWorkspace(){
   const open=S.d.board.filter(t=>t.col!=='done').length;
-  $('#wsStats').innerHTML=[['heart','#ec4899',S.d.saved.length,'Saved tools','saved'],['folder','#14b8a6',open,'Open tasks',''],['file','#4c8dff',S.d.notes.length,'Notes','notes'],['flow','#a855f7',store.get().length,'Saved workflows','']]
+  $('#wsStats').innerHTML=[['heart','#ec4899',S.d.saved.length,'Saved tools','saved'],['folder','#14b8a6',open,'Open tasks',''],['file','#4fb3da',S.d.notes.length,'Notes','notes'],['flow','#a855f7',store.get().length,'Saved workflows','']]
     .map(([i,c,v,l,t])=>`<button class="glass glow kpi row" ${t?`data-wtab-go="${t}"`:'data-go="projects"'}><div class="badge sq" style="--c:${c};width:42px;height:42px">${ic(i,19)}</div><div><div class="v sm">${v}</div><div class="l">${l}</div></div></button>`).join('');
-  $('#activity').innerHTML=S.d.activity.slice(0,7).map(a=>`<div class="lrow"><span class="badge sq" style="--c:#4c8dff;width:32px;height:32px">${ic(a.i,15)}</span><div class="res-t">${esc(a.x)}<em>${ago(a.at)}</em></div></div>`).join('')||'<div class="empty">Nothing yet — save a tool to get started.</div>';
+  $('#activity').innerHTML=S.d.activity.slice(0,7).map(a=>`<div class="lrow"><span class="badge sq" style="--c:#4fb3da;width:32px;height:32px">${ic(a.i,15)}</span><div class="res-t">${esc(a.x)}<em>${ago(a.at)}</em></div></div>`).join('')||'<div class="empty">Nothing yet — save a tool to get started.</div>';
   const P=[...new Set(S.d.board.map(t=>t.tag))].map(tag=>{const ts=S.d.board.filter(t=>t.tag===tag),d=ts.filter(t=>t.col==='done').length;return[tag,ts.length,Math.round(d/ts.length*100)]}).sort((a,b)=>b[1]-a[1]).slice(0,4);
   $('#wsProjects').innerHTML=P.map(([n,c,p])=>`<div class="lrow"><span class="badge sq" style="--c:${TAGC[n]||'#14b8a6'};width:32px;height:32px">${ic('folder',15)}</span><div class="res-t">${esc(n)}<em>${c} task${c===1?'':'s'}</em><div class="bar-track"><i style="width:${p}%"></i></div></div><small>${p}%</small></div>`).join('')||'<div class="empty">No tasks yet. Add one on the project board.</div>';
   const sv=S.d.saved.map(byName).filter(Boolean);

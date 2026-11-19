@@ -174,7 +174,7 @@ function renderResults(){
   if(tl.length)html+=`<div class="res-h">${v?'Tools':'Popular tools'}</div>`+tl.map(t=>`<div class="res" data-i="${i++}">${logoHTML(t,28)}<div class="res-t">${t.n}<em>${t.best||''}</em></div><small>${t.c}</small></div>`).join('');
   if(cl.length)html+='<div class="res-h">Categories</div>'+cl.map(c=>`<div class="res" data-i="${i++}"><div class="badge sq" style="--c:${c.color};width:28px;height:28px">${ic(c.icon,14)}</div>${c.name}<small>${c.count} tools</small></div>`).join('');
   if(wl.length)html+='<div class="res-h">Workflows</div>'+wl.map(([k,t])=>`<div class="res" data-i="${i++}"><span style="color:#b49bff">${ic('flow',18)}</span>${t.n}<small>${t.s.length} steps</small></div>`).join('');
-  if(v)html+=`<div class="res-h">Build</div><div class="res" data-i="${i++}"><span style="color:#8fb6ff">${ic('sparkle',18)}</span>Build a workflow for “${q.value.trim().replace(/</g,'&lt;')}”<small>↵</small></div>`;
+  if(v)html+=`<div class="res-h">Build</div><div class="res" data-i="${i++}"><span style="color:#98d5ee">${ic('sparkle',18)}</span>Build a workflow for “${q.value.trim().replace(/</g,'&lt;')}”<small>↵</small></div>`;
   res.innerHTML=html||'<div class="empty">No matches</div>';
   sel=-1;res.classList.add('on');
 }
@@ -333,7 +333,7 @@ function renderInsights(){
   const span=(from,to)=>{const t={u:0,g:0,m:0};for(let o=from;o<to;o++){const e=D[dayKey(ago(o))];if(e){t.u+=e.u;t.g+=e.g;t.m+=e.m}}return t};
   const cur=span(0,N),prev=span(N,2*N),time=m=>m>=120?[Math.round(m/60),'h']:[m,' min'],[tv,ts]=time(cur.m);
   const delta=(c,p)=>p>0?`${c>=p?'+':''}${Math.round((c-p)/p*100)}%`:c>0?'New':'';
-  const K=[['cube','#4c8dff',cur.u,'Tools explored','',delta(cur.u,prev.u)],['flow','#14b8a6',store.get().length,'Saved workflows','',null],['check','#a855f7',cur.g,'Guided steps done','',delta(cur.g,prev.g)],['clock','#eab308',tv,'Time saved (est.)',ts,delta(cur.m,prev.m)]];
+  const K=[['cube','#4fb3da',cur.u,'Tools explored','',delta(cur.u,prev.u)],['flow','#14b8a6',store.get().length,'Saved workflows','',null],['check','#a855f7',cur.g,'Guided steps done','',delta(cur.g,prev.g)],['clock','#eab308',tv,'Time saved (est.)',ts,delta(cur.m,prev.m)]];
   $('#kpis').innerHTML=K.map(([i,c,v,l,s,d],n)=>`<div class="glass glow kpi" data-a style="--d:${4+n}"><div class="badge sq" style="--c:${c};width:42px;height:42px">${ic(i,20)}</div><div class="v" data-count="${v}" data-suf="${s}">0</div><div class="l">${l}</div>${d?`<div class="delta">${d} ${ic('trend',13)}</div>`:`<div class="delta muted">${d===null?'All time':`vs. previous ${N} days`}</div>`}</div>`).join('');
   let pts=Array.from({length:N},(_,i)=>{const e=D[dayKey(ago(N-1-i))]||{u:0,g:0};return{u:e.u,g:e.g}});
   let labels=pts.map((_,i)=>ago(N-1-i));
@@ -350,14 +350,14 @@ function renderInsights(){
   $('#xax').innerHTML=labels.filter((_,i)=>i%step===0).slice(0,5).map(d=>`<span>${fmt(d)}</span>`).join('');
   const bars=$('#bars'),tip=$('#tip');
   bars.onmousemove=e=>{const g=e.target.closest('.grp');if(!g){tip.style.opacity=0;return}const i=+g.dataset.i,p=pts[i],r=g.getBoundingClientRect(),pr=bars.getBoundingClientRect();
-    tip.innerHTML=`<div style="color:var(--muted);margin-bottom:3px">${ins.mode==='weekly'?'Week of ':''}${fmt(labels[i])}</div><span style="color:#8fb6ff">●</span> ${p.u} tools &nbsp; <span style="color:#5eea9a">●</span> ${p.g} steps`;
+    tip.innerHTML=`<div style="color:var(--muted);margin-bottom:3px">${ins.mode==='weekly'?'Week of ':''}${fmt(labels[i])}</div><span style="color:#98d5ee">●</span> ${p.u} tools &nbsp; <span style="color:#5eea9a">●</span> ${p.g} steps`;
     tip.style.left=(r.left-pr.left+r.width/2)+'px';tip.style.top=(pr.bottom-pr.top-Math.max(p.u,p.g)/max*(pr.height))+'px';tip.style.opacity=1};
   bars.onmouseleave=()=>tip.style.opacity=0;
   const CU=Object.entries(S.d.catUse||{}).sort((a,b)=>b[1]-a[1]),total=CU.reduce((a,[,v])=>a+v,0);
   const top=CU.slice(0,5),rest=CU.slice(5).reduce((a,[,v])=>a+v,0);
   INS_CATS=top.map(([ci,v])=>[CATS[ci].short,Math.round(v/total*100),CATS[ci].color]);if(rest)INS_CATS.push(['Other',Math.round(rest/total*100),'#64748b']);
   const C=2*Math.PI*46;let acc=0;
-  $('#donut').innerHTML=`<circle cx="60" cy="60" r="46" fill="none" stroke="rgba(130,170,255,.08)" stroke-width="14"/>`+INS_CATS.map(([n,v,c],i)=>{const len=v/100*C,s=`<circle class="s" data-icat="${i}" cx="60" cy="60" r="46" stroke="${c}" stroke-dasharray="0 ${C}" data-len="${Math.max(0,len-2.5)}" stroke-dashoffset="${-acc}" style="filter:drop-shadow(0 0 4px ${c}88)"/>`;acc+=len;return s}).join('');
+  $('#donut').innerHTML=`<circle cx="60" cy="60" r="46" fill="none" stroke="rgba(79,179,218,.08)" stroke-width="14"/>`+INS_CATS.map(([n,v,c],i)=>{const len=v/100*C,s=`<circle class="s" data-icat="${i}" cx="60" cy="60" r="46" stroke="${c}" stroke-dasharray="0 ${C}" data-len="${Math.max(0,len-2.5)}" stroke-dashoffset="${-acc}" style="filter:drop-shadow(0 0 4px ${c}88)"/>`;acc+=len;return s}).join('');
   requestAnimationFrame(()=>requestAnimationFrame(()=>$$('#donut .s').forEach(s=>s.style.strokeDasharray=`${s.dataset.len} ${C}`)));
   $('#dVal').dataset.count=total;$('#dLbl').textContent='Tools explored';
   $('#cats').innerHTML=INS_CATS.map(([n,v,c],i)=>`<div data-icat="${i}"><i style="background:${c};box-shadow:0 0 8px ${c}"></i>${n}<span>${v}%</span></div>`).join('')||'<p class="muted-sm">Categories you explore will appear here.</p>';
@@ -395,9 +395,9 @@ function drawSky(t){
 /* ---------- scene: aurora + mountains + lake ---------- */
 const HZ=560;
 function strip(stops){const c=document.createElement('canvas');c.width=1;c.height=256;const x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,256);stops.forEach(([o,col])=>g.addColorStop(o,col));x.fillStyle=g;x.fillRect(0,0,1,256);return c}
-const GREEN=strip([[0,'rgba(170,80,255,0)'],[.3,'rgba(170,90,255,.22)'],[.62,'rgba(40,200,150,.38)'],[.9,'rgba(120,255,195,.85)'],[.95,'rgba(80,255,170,.5)'],[1,'rgba(80,255,170,0)']]);
-const CYAN=strip([[0,'rgba(90,110,255,0)'],[.35,'rgba(110,120,255,.2)'],[.7,'rgba(40,190,230,.35)'],[.92,'rgba(150,240,255,.9)'],[1,'rgba(150,240,255,0)']]);
-const VIOLET=strip([[0,'rgba(220,90,255,0)'],[.4,'rgba(200,110,255,.25)'],[.85,'rgba(170,140,255,.6)'],[1,'rgba(170,140,255,0)']]);
+const GREEN=strip([[0,'rgba(15,94,131,0)'],[.3,'rgba(23,134,180,.24)'],[.62,'rgba(79,179,218,.4)'],[.9,'rgba(152,213,238,.85)'],[.95,'rgba(225,242,250,.5)'],[1,'rgba(225,242,250,0)']]); // Sky palette
+const CYAN=strip([[0,'rgba(10,60,85,0)'],[.35,'rgba(15,94,131,.22)'],[.7,'rgba(79,179,218,.35)'],[.92,'rgba(225,242,250,.85)'],[1,'rgba(225,242,250,0)']]);
+const VIOLET=strip([[0,'rgba(10,60,85,0)'],[.4,'rgba(15,94,131,.3)'],[.85,'rgba(23,134,180,.6)'],[1,'rgba(23,134,180,0)']]);
 const SCN={
  home:{seed:11,trees:.6,figure:false,r:[
   {u0:.22,u1:1.08,y0:0.65,y1:0.46,amp:.07,f:2.2,h:0.84,a:1,ph:0,sp:1,s:GREEN},
@@ -441,11 +441,11 @@ function sceneSVG(c){
   const fg=ridge(c.seed+13,530,556,.6),tr=`<path d="${trees(c.seed,c.trees)}" fill="#02050d"/>`;
   const photo=(href,y)=>`<image href="${href}" x="${M.x}" y="${y}" width="${M.w}" height="${M.h}" preserveAspectRatio="none" ${fx}/>`;
   return`<defs>
-    <linearGradient id="${id}hz2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(70,98,160,0)"/><stop offset="1" stop-color="rgba(70,98,160,.5)"/></linearGradient>
-    <linearGradient id="${id}lk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(10,22,48,.3)"/><stop offset="1" stop-color="rgba(3,7,18,.95)"/></linearGradient>
+    <linearGradient id="${id}hz2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(15,94,131,0)"/><stop offset="1" stop-color="rgba(15,94,131,.5)"/></linearGradient>
+    <linearGradient id="${id}lk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(10,22,48,.3)"/><stop offset="1" stop-color="rgba(2,12,19,.95)"/></linearGradient>
     <linearGradient id="${id}fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121a30"/><stop offset="1" stop-color="#050913"/></linearGradient>
-    <radialGradient id="${id}hz" cx=".6" cy="1" r=".6"><stop offset="0" stop-color="rgba(60,220,160,.14)"/><stop offset="1" stop-color="rgba(60,220,160,0)"/></radialGradient>
-    <radialGradient id="${id}au" cx=".62" cy="0" r=".7"><stop offset="0" stop-color="rgba(110,255,200,.45)"/><stop offset="1" stop-color="rgba(110,255,200,0)"/></radialGradient>
+    <radialGradient id="${id}hz" cx=".6" cy="1" r=".6"><stop offset="0" stop-color="rgba(79,179,218,.14)"/><stop offset="1" stop-color="rgba(79,179,218,0)"/></radialGradient>
+    <radialGradient id="${id}au" cx=".62" cy="0" r=".7"><stop offset="0" stop-color="rgba(152,213,238,.45)"/><stop offset="1" stop-color="rgba(152,213,238,0)"/></radialGradient>
     <clipPath id="${id}below"><rect x="0" y="${HZ}" width="1600" height="${800-HZ}"/></clipPath>
     <mask id="${id}mm" style="mask-type:alpha">${photo(M.src,M.y)}</mask></defs>
   <rect x="0" y="260" width="1600" height="${HZ-260}" fill="url(#${id}hz)"/>
@@ -459,7 +459,7 @@ function sceneSVG(c){
   <rect x="0" y="${HZ-.5}" width="1600" height="1.5" fill="rgba(170,215,255,.1)"/>
   ${[...Array(9)].map((_,i)=>`<rect x="${140+i*150+(i%3)*30}" y="${HZ+14+i*18}" width="${80+i*26}" height=".8" fill="rgba(160,225,255,${.07-i*.006})"/>`).join('')}
   <path d="${(()=>{const R=rng(c.seed+99);let d='M0 800';for(let x=0;x<=1600;x+=24)d+=`L${x} ${(722+R()*22+Math.sin(x*.004)*24).toFixed(1)}`;return d+'L1600 800Z'})()}" fill="#01040b"/>
-  ${c.planet?`<defs><radialGradient id="${id}pl" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#3a5a9a"/><stop offset=".45" stop-color="#0f1e44"/><stop offset="1" stop-color="#02050f"/></radialGradient></defs><circle cx="1420" cy="40" r="230" fill="rgba(90,150,255,.08)"/><circle cx="1420" cy="40" r="200" fill="url(#${id}pl)" stroke="rgba(140,190,255,.55)" stroke-width="2" style="filter:drop-shadow(0 0 18px rgba(90,150,255,.6))"/>`:''}${c.figure?`<path d="M1180 742 q40-26 90-20 q30 6 50 20z" fill="#01040b"/><path d="M1243 724l1.5-15 3-5 3 5 1.5 15z M1245 701a2.8 2.8 0 1 0 5.6 0a2.8 2.8 0 1 0-5.6 0" fill="#000"/>`:''}`;
+  ${c.planet?`<defs><radialGradient id="${id}pl" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#3a5a9a"/><stop offset=".45" stop-color="#0f1e44"/><stop offset="1" stop-color="#02050f"/></radialGradient></defs><circle cx="1420" cy="40" r="230" fill="rgba(79,179,218,.08)"/><circle cx="1420" cy="40" r="200" fill="url(#${id}pl)" stroke="rgba(140,190,255,.55)" stroke-width="2" style="filter:drop-shadow(0 0 18px rgba(79,179,218,.6))"/>`:''}${c.figure?`<path d="M1180 742 q40-26 90-20 q30 6 50 20z" fill="#01040b"/><path d="M1243 724l1.5-15 3-5 3 5 1.5 15z M1245 701a2.8 2.8 0 1 0 5.6 0a2.8 2.8 0 1 0-5.6 0" fill="#000"/>`:''}`;
 }
 function makeScene(el,cfg){
   el.innerHTML='<canvas></canvas><svg viewBox="0 0 1600 800" preserveAspectRatio="xMidYMax slice"></svg><div class="shade"></div>';

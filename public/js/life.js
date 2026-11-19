@@ -8,7 +8,7 @@ const RESEARCH=[
 ];
 
 /* ---------- life areas + guided playbooks ---------- */
-const AREAS={home:['Home & Family','heart','#f472b6'],money:['Money','chart','#4ade80'],work:['Work & Career','folder','#4c8dff'],learn:['Learning','cap','#a78bfa'],
+const AREAS={home:['Home & Family','heart','#f472b6'],money:['Money','chart','#4ade80'],work:['Work & Career','folder','#4fb3da'],learn:['Learning','cap','#a78bfa'],
  travel:['Travel','globe','#22d3ee'],health:['Health & Habits','flame','#fb923c'],write:['Writing & Messages','pencil','#eab308'],plan:['Organizing','cal','#14b8a6'],
  shop:['Shopping','cart','#f97316'],create:['Creativity','sparkles','#c084fc'],admin:['Paperwork','file','#94a3b8']};
 // steps: [tool, title, prompt, tip]. {{key}} = your details, {{prev}} = what the previous step returned
@@ -233,7 +233,7 @@ function openRunner(key){
         ...src.steps.flatMap((s,i)=>{const tn=st.swap[i]||s.tool,t=byName(tn);return[`### ${st.done.includes(i)?'[x]':'[ ]'} ${i+1}. ${s.title} — ${tn}`,t?`Open: https://${t.url}`:'','```',fillPrompt(s.prompt,st.v,labels,prevText(i),prevLabel(i)).plain,'```',st.notes[i]?`**Result:**\n${st.notes[i]}`:'',''] })].join('\n');
       const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download=src.title.replace(/[^\w]+/g,'-').toLowerCase()+'.md';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('Checklist downloaded','file')}
     if(e.target.closest('#runTasks')){src.steps.forEach((s,i)=>{if(!st.done.includes(i))addTask(`${s.title} (${st.swap[i]||s.tool})`,'idea','Content',i?'Medium':'High')});toast(`${src.steps.length-st.done.length} tasks added to your board`,'folder')}
-    if(e.target.closest('#runWf')){wf={n:src.title,d:src.desc,input:Object.values(st.v).filter(Boolean).join(', '),s:src.steps.map(s=>{const t=byName(s.tool)||monoFor(s.tool),c=t.ci!=null?CATS[t.ci]:{icon:'sparkle',color:'#4c8dff'};return{i:c.icon,t:s.title,d:s.tip||t.best||'',tool:s.tool,c:c.color,r:'Step complete',prompt:s.prompt}})};renderFlow();closeOverlays();go('builder',{tab:'builder'});toast('Opened in the workflow builder — click any step to edit','flow')}
+    if(e.target.closest('#runWf')){wf={n:src.title,d:src.desc,input:Object.values(st.v).filter(Boolean).join(', '),s:src.steps.map(s=>{const t=byName(s.tool)||monoFor(s.tool),c=t.ci!=null?CATS[t.ci]:{icon:'sparkle',color:'#4fb3da'};return{i:c.icon,t:s.title,d:s.tip||t.best||'',tool:s.tool,c:c.color,r:'Step complete',prompt:s.prompt}})};renderFlow();closeOverlays();go('builder',{tab:'builder'});toast('Opened in the workflow builder — click any step to edit','flow')}
     if(e.target.closest('#runReset')){S.d.runs[key]={v:{},done:[],notes:[],swap:{}};S.save();openRunner(key)}
   };
   draw();setTimeout(()=>$('#modalBody [data-var]')?.focus(),60);

@@ -8,6 +8,26 @@ Lunorb is an AI-workspace product: a directory of 750 tools, guided "everyday" p
 
 **Where this conflicts with the generic recreation workflow below, this section wins:** the project uses split CSS/JS files (not Tailwind, not inline), it loads Google Fonts and favicon services over the network on purpose, and the user keeps adding features on top of the reference screenshots. Keep the established aurora visual language. The user explicitly asked that the aurora canvas rendering stay unchanged. Mountain/scenery tweaks are fine.
 
+**Brand (rebrand of 2026-11-19).**
+- Mark: a glass monolith rising from a glowing planet horizon (`img/mark.svg`). The nav uses the horizontal lockup: mark, `.sep`, then the wordmark.
+- Wordmark: `LUN<span class="o"></span>RB`. The `.o` is a crescent-eclipse ring drawn with an inset box-shadow; it is no longer the old slashed Ø.
+- App icon: a dark tile (`img/favicon.svg`, `img/apple-touch-icon.png`).
+- Palette: the "Sky" palette, `#04202E #0A3C55 #0F5E83 #1786B4 #4FB3DA #98D5EE #E1F2FA`. All UI blues, the aurora colour stops (`GREEN`/`CYAN`/`VIOLET` in app.js keep their old names) and the globe use it.
+- Data and category colours are deliberately unchanged.
+- The aurora rendering algorithm is still untouched; only its colours changed, at the user's request.
+
+**The Offering** (`js/offering.js`, `.offering` in app.css):
+- An open hand holds the live Ask Lunorb orb. It appears in the sign-in hero, as the middle column of the copy │ offering │ form grid, and on Home at ≥1280px, where it replaces `.side`.
+- The hand is an original image generated with Figma AI (file "Lunorb — brand assets"). Its dark backdrop was converted to alpha, giving `img/hero-hand*.webp`.
+- Don't use `mix-blend-mode` for it: `main` has `z-index` and isolates blending.
+- The orb is `canvas.globe.calm`, a dark-glass variant in globe.js with no orbit ring.
+- Behaviour:
+  - The light follows the pointer (`--px`/`--py`).
+  - The orb charges as the sign-in form fills (`--charge`).
+  - On Home the orb opens `openHelper()` with a rotating `HELPER_EX` question.
+  - The tags route with `data-go`.
+- Sign-in labels must stay real facts.
+
 **Product honesty rule.** This is a real product, so never show invented numbers: no fake ratings or reviews, follower or like counts, notifications, streaks or analytics. Show real data from `S.d` or Supabase. Where real data doesn't exist yet, show an honest empty state or the `Pending` pill (`.pending`, `pendingCard()`). Anything simulated must be labelled (the bento latency chart and terminal are).
 
 ## Live setup

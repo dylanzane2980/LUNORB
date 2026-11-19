@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lunorb</title>
 <meta name="description" content="Lunorb is an AI workspace: 750 tools, guided everyday playbooks and a workflow builder that syncs across your devices.">
-<meta name="theme-color" content="#030712">
+<meta name="theme-color" content="#020c13">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,8 +60,16 @@
 <!-- ================= AUTH ================= -->
 <section class="page" id="p-auth">
   <div class="auth">
+    <div class="offering of-auth" id="ofAuth" aria-hidden="true">
+      <div class="of-horizon"></div>
+      <img class="of-hand" src="img/hero-hand.webp" srcset="img/hero-hand-sm.webp 480w, img/hero-hand.webp 760w" sizes="400px" alt="" width="760" height="1140">
+      <div class="of-light"></div>
+      <div class="of-orb"><canvas class="globe calm"></canvas><i></i><i></i></div>
+      <div class="of-tag" style="--dx:0px;--dy:-96px;--d:6"><small>Tools</small>750 curated</div>
+      <div class="of-tag" style="--dx:-122px;--dy:6px;--d:7"><small>Playbooks</small>20 guided</div>
+      <div class="of-tag" style="--dx:122px;--dy:6px;--d:8"><small>Sync</small>Every device</div>
+    </div>
     <div class="auth-copy">
-      <img class="auth-mk" src="img/mark.svg" alt="" data-a>
       <div class="eyebrow" data-a>Welcome to Lunorb</div>
       <h1 data-a style="--d:1">Your AI workspace<br>for bigger <span class="grad">possibilities.</span></h1>
       <p class="lede" data-a style="--d:2">Find the right tools, follow guided playbooks, and build workflows that get real things done.</p>
@@ -81,16 +89,25 @@
 <section class="page" id="p-home">
   <div class="hero">
     <div>
-      <div class="lede" data-a style="font-size:15px;color:#c3cde9" id="greet">Good evening</div>
+      <div class="lede" data-a style="font-size:15px;color:#c3dbe6" id="greet">Good evening</div>
       <h1 data-a style="--d:1">Your AI workspace<br>for bigger <span class="grad">possibilities.</span></h1>
       <p class="lede" data-a style="--d:2">Discover. Build. Create. Go further with AI.</p>
     </div>
     <div class="side" data-a style="--d:3">Ideas<br>Tools<br>People<br>A brighter<br>tomorrow</div>
+    <div class="offering of-home" id="ofHome" data-a style="--d:2">
+      <div class="of-horizon"></div>
+      <img class="of-hand" src="img/hero-hand-sm.webp" alt="" width="480" height="720" aria-hidden="true">
+      <div class="of-light"></div>
+      <button class="of-orb" id="ofOrb" aria-label="Ask Lunorb"><canvas class="globe calm" aria-hidden="true"></canvas><i></i><i></i></button>
+      <button class="of-tag of-ask" id="ofAsk" style="--dx:0px;--dy:-84px"><small>Ask Lunorb</small><span id="ofAskQ">Plan meals for the week</span></button>
+      <button class="of-tag" data-go="discover" style="--dx:-118px;--dy:6px"><small>Find a tool</small>750 tools</button>
+      <button class="of-tag" data-go="life" style="--dx:118px;--dy:6px"><small>Start a playbook</small>20 guided</button>
+    </div>
   </div>
 
   <div class="search" data-a style="--d:3">
     <label>
-      <span data-ic="search" data-s="22" style="color:#aebde3"></span>
+      <span data-ic="search" data-s="22" style="color:#a9cbdc"></span>
       <input id="q" autocomplete="off" placeholder="What do you want to get done? Try “plan meals for the week”">
       <span class="kbd">/</span>
       <button class="go" id="qGo" aria-label="Go" data-ic="arrow"></button>
@@ -100,7 +117,7 @@
   <div class="chips cat-chips" id="homeChips" data-a style="--d:4"></div>
 
   <div class="grid4" style="margin-top:30px">
-    <button class="glass glow qa" data-a style="--d:4" data-go="discover"><div class="badge" style="--c:#4c8dff" data-ic="sparkle"></div><h4>Explore Tools</h4><p>750 tools, 30 categories</p></button>
+    <button class="glass glow qa" data-a style="--d:4" data-go="discover"><div class="badge" style="--c:#4fb3da" data-ic="sparkle"></div><h4>Explore Tools</h4><p>750 tools, 30 categories</p></button>
     <button class="glass glow qa" data-a style="--d:5" data-go="life"><div class="badge" style="--c:#14b8a6" data-ic="check"></div><h4>Everyday tasks</h4><p>20 guided playbooks</p></button>
     <button class="glass glow qa" data-a style="--d:6" data-go="builder"><div class="badge" style="--c:#a855f7" data-ic="flow"></div><h4>Build a Workflow</h4><p>Chain tools with AI</p></button>
     <button class="glass glow qa" data-a style="--d:7" data-act="goal"><div class="badge" style="--c:#eab308" data-ic="target"></div><h4>Tell us your goal</h4><p>Get a curated stack</p></button>
@@ -193,7 +210,7 @@
   </div>
   <div class="search" id="lifeSearch" data-a style="--d:3">
     <label>
-      <span data-ic="sparkle" data-s="22" style="color:#aebde3"></span>
+      <span data-ic="sparkle" data-s="22" style="color:#a9cbdc"></span>
       <input id="lifeQ" autocomplete="off" placeholder="What do you need help with today?">
       <button class="go" id="lifeGo" aria-label="Get a plan" data-ic="arrow"></button>
     </label>
@@ -259,7 +276,7 @@
     <div class="wf-wrap"><div class="canvas" id="flow"></div><aside class="wf-panel" id="wfPanel"></aside></div>
     <div class="prompt">
       <label>
-        <span data-ic="sparkle" style="color:#8fb6ff"></span>
+        <span data-ic="sparkle" style="color:#98d5ee"></span>
         <input id="wfPrompt" placeholder="Describe what you want to build…">
         <button class="go" id="wfGo" aria-label="Generate" data-ic="up" data-s="16"></button>
       </label>
@@ -445,7 +462,7 @@
     <div class="glass card" data-a style="--d:8">
       <div class="card-h"><h4>Activity Overview</h4><div class="seg" id="mode"><button class="on" data-mode="daily">Daily</button><button data-mode="weekly">Weekly</button></div></div>
       <div class="chart"><div class="yax" id="yax"></div><div class="plot"><div class="bars" id="bars"></div><div class="xax" id="xax"></div><div class="tip" id="tip"></div></div></div>
-      <div class="legend"><span><i style="background:#4c8dff"></i>Tools explored</span><span><i style="background:#22c55e"></i>Guided steps</span></div>
+      <div class="legend"><span><i style="background:#4fb3da"></i>Tools explored</span><span><i style="background:#22c55e"></i>Guided steps</span></div>
     </div>
     <div class="glass card" data-a style="--d:9">
       <div class="card-h"><h4>Top Categories</h4></div>
@@ -463,7 +480,7 @@
   <div class="sec-h" data-a style="--d:12"><h3>Recommended for You</h3><button class="link" data-go="builder" data-tab="templates">See all <span data-ic="arrow" data-s="14"></span></button></div>
   <div class="grid3">
     <div class="glass glow rec" data-a style="--d:13"><div class="badge sq" style="--c:#14b8a6" data-ic="link"></div><h4>Create a content engine</h4><p>Combine research, writing, and design tools to automate your content pipeline.</p><button class="btn sm" data-tpl="pipeline">Use template <span data-ic="arrow" data-s="14"></span></button></div>
-    <div class="glass glow rec" data-a style="--d:14"><div class="badge sq" style="--c:#4c8dff" data-ic="chart"></div><h4>Analyze your audience</h4><p>Turn data into insights with AI-powered research and visualization tools.</p><button class="btn sm" data-tpl="audience">Try this workflow <span data-ic="arrow" data-s="14"></span></button></div>
+    <div class="glass glow rec" data-a style="--d:14"><div class="badge sq" style="--c:#4fb3da" data-ic="chart"></div><h4>Analyze your audience</h4><p>Turn data into insights with AI-powered research and visualization tools.</p><button class="btn sm" data-tpl="audience">Try this workflow <span data-ic="arrow" data-s="14"></span></button></div>
     <div class="glass glow rec" data-a style="--d:15"><div class="badge sq" style="--c:#a855f7" data-ic="playsq"></div><h4>Turn ideas into video</h4><p>Transform your concepts into stunning videos with AI tools.</p><button class="btn sm" data-tpl="video">Get started <span data-ic="arrow" data-s="14"></span></button></div>
   </div>
 
@@ -493,6 +510,7 @@
 <script src="js/life.js"></script>
 <script src="js/bento.js"></script>
 <script src="js/globe.js"></script>
+<script src="js/offering.js"></script>
 <script src="vendor/supabase.js"></script>
 <script src="js/config.js"></script>
 <script src="js/cloud.js"></script>
